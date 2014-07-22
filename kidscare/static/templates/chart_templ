@@ -1,0 +1,47 @@
+<!DOCTYPE html>
+<html>
+<head>
+   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+   <meta name="language" content="zh_cn" />
+   <title>【{{ title }}】价格走势图</title>
+	<!-- 新 Bootstrap 核心 CSS 文件 -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.min.css">
+    <script src="../static/chartjs/Chart.js"></script>
+</head>
+<body>
+	<h1>【{{ title }}】价格走势图</h1>
+	<div style="border: 1px solid blue; margin: 10px;">
+		<canvas id="pricechart" height="150" width="200"></canvas>
+	</div>
+	<a href="{{ detail_link }}" class="btn btn-primary btn-lg btn-block active" role="button">查看更多信息</a>
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
+<script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
+<!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
+<script src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
+<script>
+	var lineChartData = {
+		labels : {{ label_list|safe }},
+		datasets : [
+			{
+				label: "My First dataset",
+				fillColor : "rgba(220,220,220,0.2)",
+				strokeColor : "rgba(220,220,220,1)",
+				pointColor : "rgba(220,220,220,1)",
+				pointStrokeColor : "#fff",
+				pointHighlightFill : "#fff",
+				pointHighlightStroke : "rgba(220,220,220,1)",
+				data : {{ price_list }}
+			}
+		]
+
+	}
+
+window.onload = function(){
+	var ctx = document.getElementById("pricechart").getContext("2d");
+	window.myLine = new Chart(ctx).Line(lineChartData, {
+		responsive: true
+	});
+}
+</script>
+</body>
+</html>
