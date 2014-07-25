@@ -30,7 +30,19 @@ class MilkProd(models.Model):
 
 class MilkBrand(models.Model):
     name = models.TextField(blank=False)
+    class Meta:
+        #managed = False 
+        db_table = 'milk_brand'
     
 class MilkSeries(models.Model):
     name = models.TextField(blank=False)
     BrandIn = models.TextField(blank=False)
+    class Meta:
+        #managed = False 
+        db_table = 'milk_series'
+    
+class MilkTunnel(models.Model):
+    name = models.TextField(blank=False)
+    class Meta:
+        #managed = False 
+        db_table = 'milk_tunnel'

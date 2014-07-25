@@ -1,4 +1,4 @@
-from mombabyprods.models import MilkBrand, MilkSeries, MilkProd
+from mombabyprods.models import MilkBrand, MilkSeries, MilkProd, MilkTunnel
 import sys
 
 class utilities(object):
@@ -11,6 +11,7 @@ class utilities(object):
         """
         MilkSeries.objects.all().delete()
         MilkBrand.objects.all().delete()
+        MilkTunnel.objects.all().delete()
         brandlist = [item.brand for item in MilkProd.objects.all()]
         unique_brandlist = {}.fromkeys(brandlist).keys()
         for item in unique_brandlist:
@@ -24,6 +25,12 @@ class utilities(object):
             for ser in unique_series:
                 s = MilkSeries(name=ser, BrandIn=brandstr)
                 s.save()
+        
+        tunnellist = [item.tunnel for item in MilkProd.objects.all()]
+        unique_tunnellist = {}.fromkeys(tunnellist).keys()
+        for item in unique_tunnellist:
+            t = MilkTunnel(name=item)
+            t.save()        
 
 # Create your tests here.
 if __name__ == "__main__":
