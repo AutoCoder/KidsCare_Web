@@ -51,9 +51,9 @@ class QueryHandler(object):
     @staticmethod
     def Series(brand=''):
         if brand:
-            return [item.name for item in MilkSeries.objects().filter(BrandIn=brand)]
+            return [item.name for item in MilkSeries.objects.filter(BrandIn=brand)]
         else:
-            return [item.name for item in MilkSeries.objects().all()]
+            return [item.name for item in MilkSeries.objects.all()]
         
     @staticmethod
     def GetTrendData(conn, ser, segment, tunnel, duration, interval):# (duration , interval) unit = day
