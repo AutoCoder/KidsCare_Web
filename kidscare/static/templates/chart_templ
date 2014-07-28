@@ -3,44 +3,86 @@
 <head>
    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
    <meta name="language" content="zh_cn" />
-   <title>【{{ title }}】价格走势图</title>
+   <title>{{ title }} - 比价图</title>
 	<!-- 新 Bootstrap 核心 CSS 文件 -->
     <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.min.css">
     <script src="../static/chartjs/Chart.js"></script>
+    <script>
+    	function legend(parent, data) {
+	    parent.className = 'legend';
+	    var datas = data.hasOwnProperty('datasets') ? data.datasets : data;
+
+	    // remove possible children of the parent
+	    while(parent.hasChildNodes()) {
+	        parent.removeChild(parent.lastChild);
+	    }
+
+	    datas.forEach(function(d) {
+	        var title = document.createElement('span');
+	        title.className = 'title';
+	        title.style.borderColor = d.hasOwnProperty('strokeColor') ? d.strokeColor : d.color;
+	        title.style.borderStyle = 'solid';
+	        parent.appendChild(title);
+
+	        var text = document.createTextNode(d.title);
+	        title.appendChild(text);
+	    });
+	}
+    </script>
 </head>
 <body>
-	<h1>【{{ title }}】价格走势图</h1>
-	<div style="border: 1px solid blue; margin: 10px;">
-		<canvas id="pricechart" height="150" width="200"></canvas>
+	{% if brand_passed %}
+	<h1>{{ Brand }}</h1>
+	{% endif %}
+	<div>
+		<ul>
+		{% for key,value in series_list %}
+		    <li>
+		    	<h2>{{ key }}</h2>
+		    	{% for seg in value %}
+		    		<h3>{{ seg }} Segment</h3>
+						<div style="border: 1px solid blue; margin: 10px;">
+							<canvas id="canvas-{{ key }}-{{ seg }}" height="150" width="200"></canvas>
+						</div>
+						<div id="legend-{{ key }}-{{ seg }}"></div>
+				{% endfor %}	    	
+		    </li>
+		{% endfor %}
+		</ul>
 	</div>
+
 	<a href="{{ detail_link }}" class="btn btn-primary btn-lg btn-block active" role="button">查看更多信息</a>
 <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
 <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
 <script src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script>
-<script>
-	var lineChartData = {
-		labels : {{ label_list|safe }},
-		datasets : [
-			{
-				label: "My First dataset",
-				fillColor : "rgba(220,220,220,0.2)",
-				strokeColor : "rgba(220,220,220,1)",
-				pointColor : "rgba(220,220,220,1)",
-				pointStrokeColor : "#fff",
-				pointHighlightFill : "#fff",
-				pointHighlightStroke : "rgba(220,220,220,1)",
-				data : {{ price_list }}
-			}
-		]
 
-	}
+<script>
+{% for chartid, chartdata in chartdata_list %}
+	var {{ chartid }} = {{ chartdata}}
+	// var lineChartData = {
+	// 	labels : {{ scrapytime_list|safe }},
+	// 	datasets : [
+	// 		{
+	// 			label: {{ tunnel }},
+	// 			fillColor : "rgba(220,220,220,0.2)",
+	// 			strokeColor : "rgba(220,220,220,1)",
+	// 			pointColor : "rgba(220,220,220,1)",
+	// 			pointStrokeColor : "#fff",
+	// 			pointHighlightFill : "#fff",
+	// 			pointHighlightStroke : "rgba(220,220,220,1)",
+	// 			data : {{ price_list }}
+	// 		}
+	// 	]
+	// }
+{% endfor %}
 
 window.onload = function(){
-	var ctx = document.getElementById("pricechart").getContext("2d");
-	window.myLine = new Chart(ctx).Line(lineChartData, {
-		responsive: true
-	});
+{% for chartid, chartdata in chartdata_list %}
+	var ctx_{{ chartid }} = document.getElementById("canvas-{{ chartid }}").getContext("2d"); //<!-- chartid =  {{ series }}-{{ seg }}-->
+	new Chart(ctx_{{ chartid }}).Line( {{ chartid }}, {	responsive: true });
+	legend(document.getElementById("legend-{{ chartid }}"), {{ chartid }});
+{% endfor %}
 }
 </script>
 </body>

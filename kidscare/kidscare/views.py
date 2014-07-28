@@ -7,6 +7,29 @@ import platform
 from datetime import *
 
 Tunnels = ["tmall", "jd", "dangdang", "yhd", "suning", "weiwei", "sfbest"]
+colorset = {
+             'tmall' : { 
+                            'fill' : "rgba(255,153,18,0.2)",
+                            'stroke' : "rgba(255,153,18,1)",},
+              'jd' : { 
+                            'fill' : "rgba(138,54,15,0.2)",
+                            'stroke' : "rgba(138,54,15,1)",},
+              'dangdang' : { 
+                            'fill' : "rgba(112,128,105,0.2)",
+                            'stroke' : "rgba(220,220,220,1)",},
+              'yhd' : { 
+                            'fill' : "rgba(50,205,50,0.2)",
+                            'stroke' : "rgba(50,205,50,1)",},
+              'suning' : { 
+                            'fill' : "rgba(218,112,214,0.2)",
+                            'stroke' : "rgba(220,220,220,1)",},
+              'weiwei' : { 
+                            'fill' : "rgba(153,51,250,0.2)",
+                            'stroke' : "rgba(153,51,250,1)",},
+              'sfbest' : { 
+                            'fill' : "rgba(255,69,0,0.2)",
+                            'stroke' : "rgba(255,69,0,1)",},
+            }
 DbHost = None
 if platform.system() is 'Windows':
     DbHost = '127.0.0.1'
@@ -34,12 +57,88 @@ def brands(request):
 
 def Series(request):
     return HttpResponse("\n".join(QueryHandler.Series(u'\u60e0\u6c0f')))
+   
+def preprocessTrendData(dictdata):
+    for seriesName,seriesData in dictdata.items():
+        for seg, chartdata in seriesData.items():
+            chartid = u"%s-%d" % (seriesName, seg)
+            chardatadict = """
+                        {
+                 labels : %s,
+                 datasets : [
+                     {
+                         label: %s,
+                         fillColor : "rgba(220,220,220,0.2)",
+                         strokeColor : "rgba(220,220,220,1)",
+                         pointColor : "rgba(220,220,220,1)",
+                         pointStrokeColor : "#fff",
+                         pointHighlightFill : "#fff",
+                         pointHighlightStroke : "rgba(220,220,220,1)",
+                         data : {{ price_list }}
+                     }
+                 ]
+             }
+            """
+            #list all scrapy date(unique) 
+            labels = []
+            tunneldictlist = {}
+            for tunnel, tunneldata in chartdata.items():
+                date2price = {}
+                if not len(tunneldata):
+                    tunneldictlist[tunnel] = [0]
+                for item in tunneldata:
+                    date2price[item[10].date()] = item[5]
+                labels += date2price.keys()
+            labels = sorted({}.fromkeys(date2price).keys())
+            
+            #fill the array with 0 value at initial
+            axis_size = len(labels)
+            for tunnel in chartdata:
+                tunneldictlist[tunnel] *= axis_size
+                
+            for tunnel, tunneldata in chartdata.items():
+                for item in tunneldata:
+                    idx = labels.index(item[10].date())
+                    tunneldictlist[tunnel][idx] = item[5]
+                   
+            for tunnel, trenddata in tunneldictlist:
+                i = 0 
+                while trenddata[i] == 0:
+                    i+=1
+                fillval = trenddata[i]
+                for i in xrange(len(trenddata)):
+                    if trenddata[i] is 0:
+                        trenddata[i] = fillval
+                    else:
+                        fillval = trenddata[i]
+                    
 
-def trenddata(request):
+                    
+
+def RenderBrandCharts(dictdata):
+    fp = open(TEMPLATE_DIRS[0] + '/chart_templ')
+    t = Template(fp.read())
+    fp.close()
+    #dict = { "S-26" : { 1:{ 'suning': [0.1,0.2,0.3,0.4], 'tmall' : [0.1,0.2,0.3,0.4]}, 2:{'suning': [0.1,0.2,0.3,0.4], 'tmall' : [0.1,0.2,0.3,0.4]}, 3:{'suning': [0.1,0.2,0.3,0.4], 'tmall' : [0.1,0.2,0.3,0.4]}, 4:{'suning': [0.1,0.2,0.3,0.4], 'tmall' : [0.1,0.2,0.3,0.4]}} } 
+
+                        
+    c = Context({'series_list': dictdata.items()})
+    html = t.render(c)
+    return html
+    
+def trendofbrand(request, brand):
     conn = MySQLdb.connect(host=DbHost, user='spider',passwd='wodemima',port=3306, charset='utf8')
     conn.select_db('Mom_Baby')
-    return HttpResponse("\n\n\n\n\n".join(QueryHandler.TrendDataOfBrand(conn, u'\u60e0\u6c0f', 10, 3)))
+    t = QueryHandler.TrendDataOfBrand(conn, u'\u60e0\u6c0f', 10, 3)
+    print t
+    return HttpResponse(str(t))
 
+def trendofseries(request, series):
+    conn = MySQLdb.connect(host=DbHost, user='spider',passwd='wodemima',port=3306, charset='utf8')
+    conn.select_db('Mom_Baby')
+    data = QueryHandler.TrendDataOfSeries(conn, series, 10, 3)
+    #return HttpResponse(str(t))
+    return RenderBrandCharts(data)
 
 class QueryHandler(object):
     #conn = MySQLdb.connect(host=DbHost, user='spider',passwd='wodemima',port=3306, charset='utf8')
@@ -105,7 +204,7 @@ class QueryHandler(object):
         """
         
         if brand not in QueryHandler.Brands():
-            return [] #return empty trend data
+            return {} #return empty trend data
         else:
             branddict = {}
             for series in QueryHandler.Series(brand):
@@ -120,7 +219,7 @@ class QueryHandler(object):
         @interval, price chart x-coordinate interval. for example. if duration = 30day, interval = 3day, this function will return a list contain 10 elements
         """
         segdict = {}
-        for seg in xrange(5):
+        for seg in xrange(1, 5):
             tunneldict = {}
             for tunnel in Tunnels:
                 tunneldict[tunnel] = QueryHandler.GetTrendData(conn, series, seg, tunnel, duration, interval)
