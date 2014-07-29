@@ -3,10 +3,10 @@
 <head>
    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
    <meta name="language" content="zh_cn" />
-   <title>{{ title }} - 比价图</title>
+   <title>比价图</title>
 	<!-- 新 Bootstrap 核心 CSS 文件 -->
     <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.min.css">
-    <script src="../static/chartjs/Chart.js"></script>
+    <script src="../../../static/chartjs/Chart.js"></script>
     <script>
     	function legend(parent, data) {
 	    parent.className = 'legend';
@@ -24,7 +24,7 @@
 	        title.style.borderStyle = 'solid';
 	        parent.appendChild(title);
 
-	        var text = document.createTextNode(d.title);
+	        var text = document.createTextNode(d.label);
 	        title.appendChild(text);
 	    });
 	}
@@ -51,7 +51,6 @@
 		</ul>
 	</div>
 
-	<a href="{{ detail_link }}" class="btn btn-primary btn-lg btn-block active" role="button">查看更多信息</a>
 <!-- jQuery文件。务必在bootstrap.min.js 之前引入 -->
 <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
 <!-- 最新的 Bootstrap 核心 JavaScript 文件 -->
@@ -59,31 +58,31 @@
 
 <script>
 {% for chartid, chartdata in chartdata_list %}
-	var {{ chartid }} = {{ chartdata}}
-	// var lineChartData = {
-	// 	labels : {{ scrapytime_list|safe }},
-	// 	datasets : [
-	// 		{
-	// 			label: {{ tunnel }},
-	// 			fillColor : "rgba(220,220,220,0.2)",
-	// 			strokeColor : "rgba(220,220,220,1)",
-	// 			pointColor : "rgba(220,220,220,1)",
-	// 			pointStrokeColor : "#fff",
-	// 			pointHighlightFill : "#fff",
-	// 			pointHighlightStroke : "rgba(220,220,220,1)",
-	// 			data : {{ price_list }}
-	// 		}
-	// 	]
-	// }
+	var {{ chartid }} = {{ chartdata|safe }};
 {% endfor %}
 
 window.onload = function(){
-{% for chartid, chartdata in chartdata_list %}
-	var ctx_{{ chartid }} = document.getElementById("canvas-{{ chartid }}").getContext("2d"); //<!-- chartid =  {{ series }}-{{ seg }}-->
+{% for chartid, realchartid in realchartIds %}
+	var ctx_{{ chartid }} = document.getElementById("canvas-{{ realchartid }}").getContext("2d"); //<!-- chartid =  {{ series }}-{{ seg }}-->
 	new Chart(ctx_{{ chartid }}).Line( {{ chartid }}, {	responsive: true });
-	legend(document.getElementById("legend-{{ chartid }}"), {{ chartid }});
+	legend(document.getElementById("legend-{{ realchartid }}"), {{ chartid }});
 {% endfor %}
 }
+// var lineChartData = {
+// 	labels : {{ scrapytime_list|safe }},
+// 	datasets : [
+// 		{
+// 			label: {{ tunnel }},
+// 			fillColor : "rgba(220,220,220,0.2)",
+// 			strokeColor : "rgba(220,220,220,1)",
+// 			pointColor : "rgba(220,220,220,1)",
+// 			pointStrokeColor : "#fff",
+// 			pointHighlightFill : "#fff",
+// 			pointHighlightStroke : "rgba(220,220,220,1)",
+// 			data : {{ price_list }}
+// 		}
+// 	]
+// }
 </script>
 </body>
 </html>
