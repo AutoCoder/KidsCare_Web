@@ -6,10 +6,12 @@
    <title>比价图</title>
 	<!-- 新 Bootstrap 核心 CSS 文件 -->
     <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.min.css">
+	<link rel="stylesheet" type="text/css" href="http://bebraw.github.io/Chart.js.legend/css/demo.css"><!-- ../../../static/css/chart.css -->
     <script src="../../../static/chartjs/Chart.js"></script>
     <script>
     	function legend(parent, data) {
 	    parent.className = 'legend';
+	    //parent.style.border = '1px solid black';
 	    var datas = data.hasOwnProperty('datasets') ? data.datasets : data;
 
 	    // remove possible children of the parent
@@ -24,8 +26,11 @@
 	        title.style.borderStyle = 'solid';
 	        parent.appendChild(title);
 
+	        var anode = document.createElement('a');
+	        anode.setAttribute('href','http://www.newsmth.net/frames.html');
 	        var text = document.createTextNode(d.label);
-	        title.appendChild(text);
+	        anode.appendChild(text);
+	        title.appendChild(anode);
 	    });
 	}
     </script>
@@ -64,7 +69,9 @@
 window.onload = function(){
 {% for chartid, realchartid in realchartIds %}
 	var ctx_{{ chartid }} = document.getElementById("canvas-{{ realchartid }}").getContext("2d"); //<!-- chartid =  {{ series }}-{{ seg }}-->
-	new Chart(ctx_{{ chartid }}).Line( {{ chartid }}, {	responsive: true });
+	var chart_{{ chartid }} = new Chart(ctx_{{ chartid }}).Line( {{ chartid }}, {	animation: false, responsive: true, bezierCurve: false});
+	//var legend_{{ chartid }} = chart_{{ chartid }}.generateLegend();
+	//$("#legend-{{ realchartid }}").html(legend_{{ chartid }});
 	legend(document.getElementById("legend-{{ realchartid }}"), {{ chartid }});
 {% endfor %}
 }
