@@ -27,7 +27,7 @@
 	        parent.appendChild(title);
 
 	        var anode = document.createElement('a');
-	        anode.setAttribute('href','http://www.newsmth.net/frames.html');
+	        anode.setAttribute('href', d.prodlink);
 	        var text = document.createTextNode(d.label);
 	        anode.appendChild(text);
 	        title.appendChild(anode);

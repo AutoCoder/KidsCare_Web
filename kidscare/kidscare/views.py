@@ -69,12 +69,14 @@ def preprocessTrendData(dictdata):
             axis_size = len(labels)
             for tunnel in tunneldictlist.keys():
                 tunneldictlist[tunnel] *= axis_size
-                
+              
+            linkdict = {}
             for tunnel, tunneldata in chartdata.items():
                 for item in tunneldata:
                     idx = labels.index(item[9].date())
                     tunneldictlist[tunnel][idx] = item[5]
-                   
+                    linkdict[tunnel] = item[8]
+                    
             for tunnel, trenddata in tunneldictlist.items():
                 i = 0 
                 while trenddata[i] == 0:
@@ -86,10 +88,10 @@ def preprocessTrendData(dictdata):
                     else:
                         fillval = trenddata[i]
                         
-            tempstr = """{label: "%s", fillColor : "rgba(%s,0.2)", strokeColor : "rgba(%s,1)", pointColor : "rgba(%s,1)", pointStrokeColor : "#fff", pointHighlightFill : "#fff", pointHighlightStroke : "rgba(%s,1)", data : %s},"""
+            tempstr = """{label: "%s", fillColor : "rgba(%s,0.2)", strokeColor : "rgba(%s,1)", pointColor : "rgba(%s,1)", pointStrokeColor : "#fff", pointHighlightFill : "#fff", pointHighlightStroke : "rgba(%s,1)", prodlink : "%s", data : %s},"""
             datasetsStr = ''
             for tunnel, trenddata in tunneldictlist.items():
-                datasetsStr += tempstr % (tunnel, colorset[tunnel], colorset[tunnel], colorset[tunnel], colorset[tunnel], trenddata)
+                datasetsStr += tempstr % (tunnel, colorset[tunnel], colorset[tunnel], colorset[tunnel], colorset[tunnel], linkdict[tunnel], trenddata)
                 
             chartdata = chartdatatempl % (labelStrList, datasetsStr)
             chartdata_list.append((chartid, chartdata))
