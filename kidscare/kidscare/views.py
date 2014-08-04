@@ -1,9 +1,11 @@
 from django.http import HttpResponse
 from django.template import Template, Context
-from django.db.models import Max
 from settings import TEMPLATE_DIRS
-from mombabyprods.models import MilkBrand, MilkSeries, MilkProd, MilkTunnel, QueryHandler
-from datetime import *
+from mombabyprods.models import QueryHandler
+from Profiler import profile
+import hashlib
+import time
+import xml.etree.ElementTree as ET
 
 colorset = {
              'tmall' : "255,153,18",
@@ -15,25 +17,83 @@ colorset = {
               'sfbest' : "255,69,0",
             }
 
+def handleWXHttpRequest(request):
+    if request.method == 'GET':
+        checkSignature(request)
+    elif request.method == 'POST':
+        response_msg(request)
+
+def checkSignature(request):
+    token = "gonnatravel"  # TOKEN setted in weixin
+    signature = request.GET.get('signature', None)
+    timestamp = request.GET.get('timestamp', None)
+    nonce = request.GET.get('nonce', None)
+    echostr = request.GET.get('echostr', None)
+    tmpList = [token, timestamp, nonce]
+    tmpList.sort()
+    tmpstr = "%s%s%s" % tuple(tmpList)
+    hashstr = hashlib.sha1(tmpstr).hexdigest()
+    if hashstr == signature:
+        return echostr
+    else:
+        return None   
+
+def response_msg(request):
+    recvmsg = request.body.read()  # 
+    root = ET.fromstring(recvmsg)
+    msg = {}
+    for child in root:
+        msg[child.tag] = child.text
+        
+    if msg["MsgType"] == "event":
+        echostr = '%s%s%s%s' % (
+            msg['FromUserName'], msg['ToUserName'], str(int(time.time())),
+            u"welcome to subscribe mom_baby")
+        return echostr
+    else:
+        #only support milk_brand input
+        brand_input = msg["Content"].encode("utf-8")
+        if brand_input in QueryHandler.Brand2EBrand.keys():
+            return seriesofbrand(None, None, brand_input)
+        else:
+            return u"The Input brand have not been included in mom_baby system!"
+    
 def hello(request):
     return HttpResponse("Hello world")
 
 def brands(request):
     return HttpResponse("\n".join(QueryHandler.Brands()))
 
+@profile("seriesofbrand.prof")
 def seriesofbrand(request, ebrand):
-    brand = QueryHandler.EBrand2Brand[ebrand]
-    show_list = QueryHandler.Series(brand)
-    return HttpResponse(str(show_list))
+    branda = QueryHandler.EBrand2Brand[ebrand]
+    show_list = QueryHandler.Series(branda)
+    c = Context({
+             'ToUserName' : 'lilei',
+             'FromUserName': 'hanmeimei',
+             'createTime': str(int(time.time())),
+             'series_list': __renderShowList(show_list),
+             'series_count': len(show_list),
+             'msgtype' : 'news'
+             })
+    fp = open(TEMPLATE_DIRS[0] + '/series_templ')
+    t = Template(fp.read())
+    fp.close()
+    
+    html = t.render(c)
+    return HttpResponse(html)
 
 def __renderShowList(show_list):
+    contextlist = []
     for item in show_list:
-        showdict = []
+        showdict = {}
         showdict['seriesName'] = item.name
-        showdict['title'] = '200 yuan, 900g'
+        showdict['title'] = u'%s the lowest price: %d yuan %dg' % (item.tunnel, item.price, item.volume)
         showdict['picurl'] = item.pic_link
-        showdict['url'] = u"http://%s/series/%s/trend" % ('10.31.186.63', item.ename)
- 
+        showdict['url'] = u"http://%s/series/%s/trend" % ('10.31.186.63', QueryHandler.Series2ESeries[item.name])
+        contextlist.append(showdict)
+    return contextlist
+        
 def trendofseries(request, series):
     data = QueryHandler.TrendDataOfSeries(series, 10, 3)
     return RenderBrandCharts(data)

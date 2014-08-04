@@ -7,10 +7,10 @@
 <Articles>
 {% for item in series_list %}
 <item>
-<Title><![CDATA[{{ item.seriesName }}}]]></Title>
-<Description><![CDATA[{{ item.title }}]]></Description>
-<PicUrl><![CDATA[{{ item.picurl }}]]></PicUrl>
-<Url><![CDATA[{{ item.url }}]]></Url>
+<Title><![CDATA[{{ item.seriesName|safe }}}]]></Title>
+<Description><![CDATA[{{ item.title|safe }}]]></Description>
+<PicUrl><![CDATA[{{ item.picurl|safe }}]]></PicUrl>
+<Url><![CDATA[{{ item.url|safe }}]]></Url>
 </item>
 {% endfor %}
 </Articles>

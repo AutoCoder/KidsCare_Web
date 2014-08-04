@@ -1,12 +1,13 @@
 from django.conf.urls import patterns, include, url
 
 from django.contrib import admin
-from views import hello, brands, seriesofbrand, trendofbrand, trendofseries
+from views import hello, brands, seriesofbrand, trendofbrand, trendofseries, handleWXHttpRequest
 from settings import STATICFILES_DIRS
 admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
+    url(r'^/$', handleWXHttpRequest),
     url(r'^hello/$', hello),
     url(r'^brands/$', brands),
     url(r'^brand/(.*)/series/$', seriesofbrand),

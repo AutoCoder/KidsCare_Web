@@ -137,11 +137,10 @@ class MilkSeries(models.Model):
 class MilkTunnel(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.TextField()
+    cname = models.TextField()
     class Meta:
         managed = False
         db_table = 'milk_tunnel'
-
-Tunnels = ["tmall", "jd", "dangdang", "yhd", "suning", "weiwei", "sfbest"]
 
 DbHost = None
 if platform.system() is 'Windows':
@@ -154,11 +153,16 @@ DbConn = MySQLdb.connect(host=DbHost, user='spider',passwd='wodemima',port=3306,
 DbConn.select_db('Mom_Baby')   
 
 class QueryHandler(object):
-    tunnels = [item.name for item in MilkTunnel.objects.all()]
+    Tunnels2Ltunnels = {}
+    Series2ESeries = {}
     EBrand2Brand = {}; Brand2EBrand = {};
     for item in MilkBrand.objects.all():
         EBrand2Brand[item.ename] = item.name
         Brand2EBrand[item.name] = item.ename
+    for item in MilkTunnel.objects.all():
+        Tunnels2Ltunnels[item.name] = item.cname
+    for item in MilkSeries.objects.all():
+        Series2ESeries[item.name] = item.ename
     
     @staticmethod
     def Brands():
@@ -175,7 +179,7 @@ class QueryHandler(object):
         cheapest_prod = []
         for seriesname in series_list:
             cheapest = MilkProd(unitprice=10000)
-            for tunnelstr in QueryHandler.tunnels:
+            for tunnelstr in QueryHandler.Tunnels2Ltunnels.keys():
                 temp = MilkProd.objects.filter(name=seriesname, tunnel=tunnelstr).order_by('-scrapy_time')
                 if temp and cheapest.unitprice > temp[0].unitprice:
                     cheapest = temp[0]
@@ -250,7 +254,7 @@ class QueryHandler(object):
         segdict = {}
         for seg in xrange(1, 5):
             tunneldict = {}
-            for tunnel in Tunnels:
+            for tunnel in QueryHandler.Tunnels2Ltunnels.keys():
                 tunneldict[tunnel] = QueryHandler.GetTrendData(series, seg, tunnel, duration, interval)
             segdict[seg] = tunneldict
         return segdict                #QueryHandler.GetTrendData(series, duration, interval)
