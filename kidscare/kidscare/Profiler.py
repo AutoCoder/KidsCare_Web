@@ -32,7 +32,7 @@ def profile(log_file):
             # Add a timestamp to the profile output when the callable
             # is actually called.
             (base, ext) = os.path.splitext(log_file)
-            base = base + "-" + time.strftime("%Y%m%dT%H%M%S", time.gmtime())
+            #base = base + "-" + time.strftime("%Y%m%dT%H%M%S", time.gmtime())
             final_log_file = base + ext
 
             prof = hotshot.Profile(final_log_file)

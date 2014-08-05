@@ -188,9 +188,11 @@ class QueryHandler(object):
         for seriesname in series_list:
             cheapest = MilkProd(unitprice=10000)
             for tunnelstr in QueryHandler.Tunnels2Ltunnels.keys():
-                temp = MilkProd.objects.filter(name=seriesname, tunnel=tunnelstr).order_by('-scrapy_time')
-                if temp and cheapest.unitprice > temp[0].unitprice:
-                    cheapest = temp[0]
+                count = MilkProd.objects.filter(name=seriesname, tunnel=tunnelstr).count()
+                if count:
+                    temp = MilkProd.objects.filter(name=seriesname, tunnel=tunnelstr).order_by('-scrapy_time')[0]
+                    if temp and cheapest.unitprice > temp.unitprice:
+                        cheapest = temp
             cheapest_prod.append(cheapest)
         return cheapest_prod
     

@@ -93,7 +93,8 @@ def __renderShowList(show_list):
         showdict['url'] = u"http://%s/series/%s/trend" % ('10.31.186.63', QueryHandler.Series2ESeries[item.name])
         contextlist.append(showdict)
     return contextlist
-        
+       
+@profile("2000.prof") 
 def trendofseries(request, series):
     data = QueryHandler.TrendDataOfSeries(series, 10, 3)
     html =  RenderSeriesCharts(data, series)
