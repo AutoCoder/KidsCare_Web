@@ -37,7 +37,7 @@
 </head>
 <body>
 	{% if brand_passed %}
-	<h1>{{ Brand }}</h1>
+	<h1>{{ brand }}</h1>
 	{% endif %}
 	<div>
 		<ul>

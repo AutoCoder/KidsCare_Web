@@ -19,9 +19,9 @@ colorset = {
 
 def handleWXHttpRequest(request):
     if request.method == 'GET':
-        checkSignature(request)
+        return checkSignature(request)
     elif request.method == 'POST':
-        response_msg(request)
+        return response_msg(request)
 
 def checkSignature(request):
     token = "gonnatravel"  # TOKEN setted in weixin
@@ -39,7 +39,7 @@ def checkSignature(request):
         return None   
 
 def response_msg(request):
-    recvmsg = request.body.read()  # 
+    recvmsg = request.body # 
     root = ET.fromstring(recvmsg)
     msg = {}
     for child in root:
@@ -52,9 +52,9 @@ def response_msg(request):
         return echostr
     else:
         #only support milk_brand input
-        brand_input = msg["Content"].encode("utf-8")
+        brand_input = msg["Content"]#.encode("utf-8")
         if brand_input in QueryHandler.Brand2EBrand.keys():
-            return seriesofbrand(None, None, brand_input)
+            return seriesofbrand(None, None, brand_input, msg)
         else:
             return u"The Input brand have not been included in mom_baby system!"
     
@@ -64,13 +64,13 @@ def hello(request):
 def brands(request):
     return HttpResponse("\n".join(QueryHandler.Brands()))
 
-@profile("seriesofbrand.prof")
-def seriesofbrand(request, ebrand):
-    branda = QueryHandler.EBrand2Brand[ebrand]
+@profile("1000.prof")
+def seriesofbrand(request, ebrand, brand=None, msg={'ToUserName':'lilei', 'FromUserName':'hanmeimei'}):
+    branda = brand if brand else QueryHandler.EBrand2Brand[ebrand] 
     show_list = QueryHandler.Series(branda)
     c = Context({
-             'ToUserName' : 'lilei',
-             'FromUserName': 'hanmeimei',
+             'ToUserName' : msg['ToUserName'],
+             'FromUserName': msg['FromUserName'],
              'createTime': str(int(time.time())),
              'series_list': __renderShowList(show_list),
              'series_count': len(show_list),
@@ -96,11 +96,12 @@ def __renderShowList(show_list):
         
 def trendofseries(request, series):
     data = QueryHandler.TrendDataOfSeries(series, 10, 3)
-    return RenderBrandCharts(data)
+    html =  RenderSeriesCharts(data, series)
+    return HttpResponse(html)   
 
 def trendofbrand(request, brand):
     data = QueryHandler.TrendDataOfBrand(u'\u60e0\u6c0f', 10, 3)
-    html = RenderBrandCharts(data)
+    html = RenderBrandCharts(data, brand)
     return HttpResponse(html)   
 
 def preprocessTrendData(dictdata):
@@ -157,7 +158,7 @@ def preprocessTrendData(dictdata):
             
     return chartdata_list
 
-def RenderBrandCharts(dictdata):
+def RenderBrandCharts(dictdata, brand):
     fp = open(TEMPLATE_DIRS[0] + '/chart_templ')
     t = Template(fp.read())
     fp.close()
@@ -165,7 +166,8 @@ def RenderBrandCharts(dictdata):
 
     chartdata_list = preprocessTrendData(dictdata)
     c = Context({
-                 'brand_passed' : False,
+                 'brand_passed' : True,
+                 'brand' : brand,
                  'series_list': dictdata.items(),
                  'chartdata_list': chartdata_list,
                  'realchartIds' : [ (item[0], item[0].replace('_','-')) for item in chartdata_list ]
@@ -173,6 +175,25 @@ def RenderBrandCharts(dictdata):
     html = t.render(c)
     return html
     
+def RenderSeriesCharts(dictdata, series):
+    fp = open(TEMPLATE_DIRS[0] + '/chart_templ')
+    t = Template(fp.read())
+    fp.close()
+    #dict = { "S-26" : { 1:{ 'suning': [0.1,0.2,0.3,0.4], 'tmall' : [0.1,0.2,0.3,0.4]}, 2:{'suning': [0.1,0.2,0.3,0.4], 'tmall' : [0.1,0.2,0.3,0.4]}, 3:{'suning': [0.1,0.2,0.3,0.4], 'tmall' : [0.1,0.2,0.3,0.4]}, 4:{'suning': [0.1,0.2,0.3,0.4], 'tmall' : [0.1,0.2,0.3,0.4]}} } 
+
+    brandname = QueryHandler.BrandName(series)
+    isbrand_passed = True if brandname else False
+    origDict = {}
+    origDict[series] = dictdata
+    chartdata_list = preprocessTrendData(origDict)
+    c = Context({
+                 'brand_passed' : isbrand_passed,
+                 'brand' : brandname,
+                 'series_list': origDict.items(),
+                 'chartdata_list': chartdata_list,
+                 'realchartIds' : [ (item[0], item[0].replace('_','-')) for item in chartdata_list ]
+                 })
+    return t.render(c)
 
 
 

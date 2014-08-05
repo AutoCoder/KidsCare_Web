@@ -4,15 +4,13 @@
 <CreateTime>{{ createTime }}</CreateTime>
 <MsgType><![CDATA[{{ msgtype }}]]></MsgType>
 <ArticleCount>{{ series_count }}</ArticleCount>
-<Articles>
-{% for item in series_list %}
+<Articles>{% for item in series_list %}
 <item>
 <Title><![CDATA[{{ item.seriesName|safe }}}]]></Title>
 <Description><![CDATA[{{ item.title|safe }}]]></Description>
 <PicUrl><![CDATA[{{ item.picurl|safe }}]]></PicUrl>
 <Url><![CDATA[{{ item.url|safe }}]]></Url>
-</item>
-{% endfor %}
+</item>{% endfor %}
 </Articles>
 <FuncFlag>1</FuncFlag>
 </xml> 

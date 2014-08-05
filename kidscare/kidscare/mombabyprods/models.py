@@ -167,6 +167,14 @@ class QueryHandler(object):
     @staticmethod
     def Brands():
         return [item.name for item in MilkBrand.objects.all()]
+    
+    @staticmethod
+    def BrandName(series):
+        brandset = MilkSeries.objects.filter(name=series)
+        if brandset:
+            return brandset[0].brandin
+        else:
+            return None
 
     @staticmethod
     def Series(brand):
@@ -241,7 +249,7 @@ class QueryHandler(object):
         else:
             branddict = {}
             for series in QueryHandler.Series(brand):
-                branddict[series] = QueryHandler.TrendDataOfSeries(series, duration, interval)
+                branddict[series.name] = QueryHandler.TrendDataOfSeries(series.name, duration, interval)
             return branddict
         
     @staticmethod

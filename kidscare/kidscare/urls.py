@@ -7,7 +7,7 @@ admin.autodiscover()
 
 urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^/$', handleWXHttpRequest),
+    url(r'^$', handleWXHttpRequest),
     url(r'^hello/$', hello),
     url(r'^brands/$', brands),
     url(r'^brand/(.*)/series/$', seriesofbrand),
