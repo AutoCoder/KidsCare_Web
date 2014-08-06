@@ -1,8 +1,8 @@
 <xml>
-<ToUserName><![CDATA[ {{ ToUserName }}]]></ToUserName>
+<ToUserName><![CDATA[{{ ToUserName }}]]></ToUserName>
 <FromUserName><![CDATA[{{ FromUserName }}]]></FromUserName>
 <CreateTime>{{ createTime }}</CreateTime>
-<MsgType><![CDATA[{{ msgtype }}]]></MsgType>
+<MsgType><![CDATA[{{ msgType }}]]></MsgType>
 <ArticleCount>{{ series_count }}</ArticleCount>
 <Articles>{% for item in series_list %}
 <item>

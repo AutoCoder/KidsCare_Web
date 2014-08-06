@@ -97,3 +97,5 @@ TEMPLATE_DIRS = (
 )
 
 PROFILE_LOG_BASE = os.path.join(BASE_DIR, 'log/profilings/')
+
+MOMBABY_HOST = '10.31.186.63:8004'
