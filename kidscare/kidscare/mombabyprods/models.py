@@ -206,14 +206,10 @@ class QueryHandler(object):
             sql = u"""Select tunnel, brand, segment, name, price, unitprice, volume, pic_link, prod_link, scrapy_time FROM
                     (SELECT tunnel, brand, segment, name, price, unitprice, volume, pic_link, prod_link, scrapy_time,
                     timestampdiff (hour, scrapy_time, NOW()) AS intervals 
-                    FROM mom_baby.milk_prod
+                    FROM mom_baby.milk_prod where segment = %d and name = '%s' and tunnel = '%s' and scrapy_time between date_sub(NOW(), INTERVAL %d DAY) and NOW()
                     ) AS t 
-                    WHERE (t.intervals %s) < 24 and 
-                        tunnel = '%s' and 
-                        segment = %d and 
-                        name = '%s' and 
-                        scrapy_time between date_sub(NOW(), INTERVAL %d DAY) and NOW()
-                        order by scrapy_time Asc;""" % ('% ' + str(subsection * 24), tunnel, segment, ser, duration)
+                    WHERE (t.intervals %s) < 24
+                        order by scrapy_time Asc;""" % (segment, ser, tunnel, duration, '% ' + str(subsection * 24))
             cur.execute(sql)
             rows = cur.fetchall()
         except Exception, e:
