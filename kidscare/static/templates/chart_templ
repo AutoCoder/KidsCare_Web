@@ -45,7 +45,7 @@
 		    <li>
 		    	<h2>{{ key }}</h2>
 		    	{% for seg in value %}
-		    		<h3>{{ seg }} Segment</h3>
+		    		<h3>{{ seg }}段</h3>
 						<div style="border: 1px solid blue; margin: 10px;">
 							<canvas id="canvas-{{ key }}-{{ seg }}" height="150" width="200"></canvas>
 						</div>

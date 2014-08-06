@@ -1,7 +1,7 @@
 from django.http import HttpResponse
 from django.template import Template, Context
 from settings import TEMPLATE_DIRS
-from mombabyprods.models import QueryHandler
+from mombabyprods.MilkQueryHandler import QueryHandler
 from Profiler import profile
 import hashlib
 import time
