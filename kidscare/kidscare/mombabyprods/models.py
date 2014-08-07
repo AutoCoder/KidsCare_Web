@@ -10,6 +10,7 @@
 from __future__ import unicode_literals
 
 from django.db import models
+import datetime 
 
 class AuthGroup(models.Model):
     id = models.IntegerField(primary_key=True)
@@ -96,7 +97,16 @@ class DjangoSession(models.Model):
     class Meta:
         managed = False
         db_table = 'django_session'
-
+        
+class WXUserInput(models.Model):
+    id = models.IntegerField(primary_key=True)
+    input = models.CharField(max_length=30)
+    wxuseraccout = models.CharField(max_length=30)
+    inputdatetime = models.DateTimeField(default=datetime.datetime.now)
+    class Meta:
+        managed = False
+        db_table = 'wx_userinput'
+        
 class MilkBrand(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=20)

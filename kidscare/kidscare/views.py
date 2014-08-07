@@ -1,7 +1,8 @@
 from django.http import HttpResponse
 from django.template import Template, Context
 from settings import TEMPLATE_DIRS, MOMBABY_HOST
-from mombabyprods.MilkQueryHandler import QueryHandler
+from mombabyprods.MilkQueryHandler import QueryHandler 
+from mombabyprods.models import WXUserInput
 from Profiler import profile
 import hashlib
 import time
@@ -169,6 +170,8 @@ class WeiXinHandler:
         if msg["MsgType"] == "event":
             return WeiXinHandler.response_subscribe(msg)
         else:
+            #record the wx user input for data Analysis later
+            WeiXinHandler.record_wxuserinput(msg)
             wxinput = msg["Content"]
             if wxinput in QueryHandler.Brand2EBrand.keys():
                 return WeiXinHandler.reponse_seriescharts(wxinput, msg)
@@ -257,3 +260,11 @@ class WeiXinHandler:
         
         xmlReply = t.render(c)
         return xmlReply
+    
+    @staticmethod
+    def record_wxuserinput(msg):
+        try:
+            wxinput = WXUserInput(input=msg['Content'],wxuseraccout=msg['FromUserName'])
+            wxinput.save()
+        except Exception, info:
+            print "exceptions %s" % info
