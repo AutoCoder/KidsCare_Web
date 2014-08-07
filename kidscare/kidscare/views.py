@@ -27,14 +27,14 @@ def handleWXHttpRequest(request):
 def hello(request):
     return HttpResponse("Hello world")
 
-@profile("1000.prof")
+#@profile("1000.prof")
 def seriesofbrand(request, ebrand, brand=None, msg={'ToUserName':'lilei', 'FromUserName':'hanmeimei'}):
     branda = brand if brand else QueryHandler.EBrand2Brand[ebrand] 
     return HttpResponse(WeiXinHandler.reponse_seriescharts(branda, msg))
        
-@profile("2000.prof") 
+#@profile("2000.prof") 
 def trendofseries(request, series):
-    data = QueryHandler.TrendDataOfSeries(series, 10, 3)
+    data = QueryHandler.TrendDataOfSeries(QueryHandler.ESeries2Series[series], 10, 3)
     html =  RenderSeriesCharts(data, series)
     return HttpResponse(html)   
 
@@ -121,10 +121,24 @@ def RenderSeriesCharts(dictdata, series):
     fp.close()
     #dict = { "S-26" : { 1:{ 'suning': [0.1,0.2,0.3,0.4], 'tmall' : [0.1,0.2,0.3,0.4]}, 2:{'suning': [0.1,0.2,0.3,0.4], 'tmall' : [0.1,0.2,0.3,0.4]}, 3:{'suning': [0.1,0.2,0.3,0.4], 'tmall' : [0.1,0.2,0.3,0.4]}, 4:{'suning': [0.1,0.2,0.3,0.4], 'tmall' : [0.1,0.2,0.3,0.4]}} } 
 
-    brandname = QueryHandler.BrandName(series)
+    def preprocess_dictdata():
+        """
+        preprocess dictdata to remove the empty dict node(segment)
+        """
+        for segKey,segValue in dictdata.items():
+            isremovable = True
+            for tunnelKey,tunnelValue in segValue.items():
+                if tunnelValue:
+                    isremovable = False
+                    break
+            if isremovable:
+                del dictdata[segKey]
+                
+    preprocess_dictdata()        
+    brandname = QueryHandler.BrandName(QueryHandler.ESeries2Series[series])
     isbrand_passed = True if brandname else False
     origDict = {}
-    origDict[series] = dictdata
+    origDict[QueryHandler.ESeries2Series[series]] = dictdata
     chartdata_list = preprocessTrendData(origDict)
     c = Context({
                  'brand_passed' : isbrand_passed,

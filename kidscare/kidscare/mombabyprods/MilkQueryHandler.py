@@ -15,6 +15,7 @@ DbConn.select_db('Mom_Baby')
 class QueryHandler(object):
     Tunnels2Ltunnels = {}
     Series2ESeries = {}
+    ESeries2Series = {}
     EBrand2Brand = {}; Brand2EBrand = {};
     for item in MilkBrand.objects.all():
         EBrand2Brand[item.ename] = item.name
@@ -23,6 +24,7 @@ class QueryHandler(object):
         Tunnels2Ltunnels[item.name] = item.cname
     for item in MilkSeries.objects.all():
         Series2ESeries[item.name] = item.ename
+        ESeries2Series[item.ename] = item.name
     
     @staticmethod
     def Brands():
