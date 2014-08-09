@@ -5,9 +5,9 @@ from kidscare.settings import RunInCloud
 
 DbHost = None
 if RunInCloud:    
-    DbHost = '10.31.186.63'
-else:
     DbHost = 'alikidscare.mysql.rds.aliyuncs.com'
+else: 
+    DbHost = '10.31.186.63'
 
 DbConn = MySQLdb.connect(host=DbHost, user='spider',passwd='wodemima',port=3306, charset='utf8')
 DbConn.select_db('Mom_Baby')   
