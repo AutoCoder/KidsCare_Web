@@ -1,14 +1,14 @@
 import MySQLdb
 import platform
 from models import MilkBrand, MilkProd, MilkSeries, MilkTunnel
+from kidscare.settings import RunInCloud
 
 DbHost = None
-if platform.system() is 'Windows':
-    DbHost = '127.0.0.1'
-elif platform.system() in ('Linux',):
+if RunInCloud:    
     DbHost = '10.31.186.63'
 else:
-    DbHost = '10.31.186.63'
+    DbHost = 'alikidscare.mysql.rds.aliyuncs.com'
+
 DbConn = MySQLdb.connect(host=DbHost, user='spider',passwd='wodemima',port=3306, charset='utf8')
 DbConn.select_db('Mom_Baby')   
 

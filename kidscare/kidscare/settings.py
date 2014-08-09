@@ -8,6 +8,7 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.6/ref/settings/
 """
 
+RunInCloud = True
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -55,19 +56,32 @@ WSGI_APPLICATION = 'kidscare.wsgi.application'
 
 # Database
 # https://docs.djangoproject.com/en/1.6/ref/settings/#databases
-
-DATABASES = {
-    'default': {
-        # 'ENGINE': 'django.db.backends.sqlite3',
-        # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
-        'ENGINE': 'django.db.backends.mysql',
-        'NAME': 'mom_baby',
-        'USER': 'spider',
-        'PASSWORD': 'wodemima',
-        'HOST': '127.0.0.1',
-        'PORT': '3306'
+if RunInCloud:
+   DATABASES = {
+        'default': {
+            # 'ENGINE': 'django.db.backends.sqlite3',
+            # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'mom_baby',
+            'USER': 'spider',
+            'PASSWORD': 'wodemima',
+            'HOST': 'alikidscare.mysql.rds.aliyuncs.com',
+            'PORT': '3306'
+        }
     }
-}
+else:
+    DATABASES = {
+        'default': {
+            # 'ENGINE': 'django.db.backends.sqlite3',
+            # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+            'ENGINE': 'django.db.backends.mysql',
+            'NAME': 'mom_baby',
+            'USER': 'spider',
+            'PASSWORD': 'wodemima',
+            'HOST': '127.0.0.1',
+            'PORT': '3306'
+        }
+    }
 
 # Internationalization
 # https://docs.djangoproject.com/en/1.6/topics/i18n/
@@ -98,4 +112,7 @@ TEMPLATE_DIRS = (
 
 PROFILE_LOG_BASE = os.path.join(BASE_DIR, 'log/profilings/')
 
-MOMBABY_HOST = '10.31.186.63:8004'
+if RunInCloud:
+    MOMBABY_HOST = '121.40.99.4'
+else:
+    MOMBABY_HOST = '10.31.186.63:8004'
