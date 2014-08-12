@@ -156,7 +156,7 @@ class WeiXinHandler:
         """
         This method is for wx api, which will return a signature to make sure this site is for a specified weixin Subscribe-Service
         """
-        token = "gonnatravel"  # TOKEN setted in weixin
+        token = "mombaby"  # TOKEN setted in weixin
         signature = request.GET.get('signature', None)
         timestamp = request.GET.get('timestamp', None)
         nonce = request.GET.get('nonce', None)
