@@ -198,8 +198,8 @@ class WeiXinHandler:
     def supported_brandlist(msg):
         brands = QueryHandler.Brands()
         c = Context({
-                 'ToUserName' : msg['ToUserName'],
-                 'FromUserName': msg['FromUserName'],
+                 'ToUserName' : msg['FromUserName'],
+                 'FromUserName': msg['ToUserName'],
                  'createTime': str(int(time.time())),
                  'content' : "\n".join(brands),
                  'msgType' : 'text'
@@ -227,8 +227,8 @@ class WeiXinHandler:
             return contextlist 
         
         c = Context({
-                 'ToUserName' : msg['ToUserName'],
-                 'FromUserName': msg['FromUserName'],
+                 'ToUserName' : msg['FromUserName'],
+                 'FromUserName': msg['ToUserName'],
                  'createTime': str(int(time.time())),
                  'series_list': renderShowList(show_list),
                  'series_count': len(show_list),
@@ -245,8 +245,8 @@ class WeiXinHandler:
     def response_subscribe(msg):
         welcome_str = u"""\u6b22\u8fce\u5173\u6ce8\u6bcd\u5a74\u7528\u54c1\u6bd4\u4ef7\u5fae\u4fe1\u53f7\uff0c\u53ef\u4ee5\u56de\u590d\u5976\u7c89\u54c1\u724c\u5982\u60e0\u6c0f\uff0c\u67e5\u8be2\u5f53\u524d\u5404\u5927\u7535\u5546\u6700\u4f4e\u4ef7\uff08\u56de\u590d\u5976\u7c89\u67e5\u8be2\u5f53\u524d\u6536\u5f55\u7684\u54c1\u724c\uff09"""
         c = Context({
-                 'ToUserName' : msg['ToUserName'],
-                 'FromUserName': msg['FromUserName'],
+                 'ToUserName' : msg['FromUserName'],
+                 'FromUserName': msg['ToUserName'],
                  'createTime': str(int(time.time())),
                  'content' : welcome_str,
                  'msgType' : 'text'
@@ -262,8 +262,8 @@ class WeiXinHandler:
     def response_wronginput(msg):
         reply_templ = u"\u60a8\u8f93\u5165\u7684\u5976\u7c89\u54c1\u724c\u672c\u53f7\u6682\u65f6\u4e0d\u652f\u6301"
         c = Context({
-                 'ToUserName' : msg['ToUserName'],
-                 'FromUserName': msg['FromUserName'],
+                 'ToUserName' : msg['FromUserName'],
+                 'FromUserName': msg['ToUserName'],
                  'createTime': str(int(time.time())),
                  'content' : reply_templ,
                  'msgType' : 'text'
