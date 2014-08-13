@@ -7,6 +7,7 @@ from Profiler import profile
 import hashlib
 import time
 import xml.etree.ElementTree as ET
+import socket
 
 colorset = {
              'tmall' : "255,153,18",

@@ -7,8 +7,11 @@ https://docs.djangoproject.com/en/1.6/topics/settings/
 For the full list of settings and their values, see
 https://docs.djangoproject.com/en/1.6/ref/settings/
 """
-
-RunInCloud = True
+import socket
+if socket.gethostname() == 'iZ23otdlkscZ':
+    RunInCloud = True
+else:
+    RunInCloud = False
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 import os
 BASE_DIR = os.path.dirname(os.path.dirname(__file__))
@@ -114,5 +117,8 @@ PROFILE_LOG_BASE = os.path.join(BASE_DIR, 'log/profilings/')
 
 if RunInCloud:
     MOMBABY_HOST = '121.40.99.4'
+    DbHost = 'alikidscare.mysql.rds.aliyuncs.com'
 else:
     MOMBABY_HOST = '10.31.186.63:8004'
+    DbHost = '10.31.186.63'
+    
