@@ -10,7 +10,6 @@
 from __future__ import unicode_literals
 
 from django.db import models
-import datetime
 
 class AuthGroup(models.Model):
     id = models.IntegerField(primary_key=True)
