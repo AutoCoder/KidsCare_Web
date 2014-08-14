@@ -109,9 +109,7 @@ STATICFILES_DIRS = (
     os.path.join(BASE_DIR, 'static'),
 )
 
-TEMPLATE_DIRS = (
-    os.path.join(BASE_DIR, 'static/templates'),
-)
+TEMPLATE_DIR = os.path.join(BASE_DIR, 'static/templates')
 
 PROFILE_LOG_BASE = os.path.join(BASE_DIR, 'log/profilings/')
 
