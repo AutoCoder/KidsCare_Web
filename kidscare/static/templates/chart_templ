@@ -1,16 +1,16 @@
 <!DOCTYPE html>
 <html>
 <head>
-   <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
-   <meta name="language" content="zh_cn" />
-   <title>比价图</title>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="language" content="zh_cn" />
+    <title>比价图</title>
 	<!-- 新 Bootstrap 核心 CSS 文件 -->
-    <!-- <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.min.css"> -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.min.css">
 	<link rel="stylesheet" type="text/css" href="http://bcs.duapp.com/mombaby/css/chart.css"><!-- ../../../static/css/chart.css -->
     <script src="http://bcs.duapp.com/mombaby/js/chartjs/Chart.min.js"></script>
     <script>
     	function legend(parent, data) {
-	    parent.className = 'legend';
+	    parent.className = 'col-md-2 col-sm-2 legend';
 	    //parent.style.border = '1px solid black';
 	    var datas = data.hasOwnProperty('datasets') ? data.datasets : data;
 
@@ -35,31 +35,44 @@
 	}
     </script>
 </head>
-<body>
-	{% if brand_passed %}
-	<h1>{{ brand }}</h1>
-	{% endif %}
-	<div>
-		<ul>
-		{% for key,value in series_list %}
-		    <li>
-		    	<h2>{{ key }}</h2>
-		    	{% for seg in value %}
-		    		<h3>{{ seg }}段</h3>
-						<div style="border: 1px solid blue; margin: 10px;">
-							<canvas id="canvas-{{ key }}-{{ seg }}" height="150" width="200"></canvas>
+<body role="document">
+	 <div class="page-header">
+	 <h1>{{ page_title }}</h1>
+	 </div>
+	 <ul class="nav nav-tabs" id="myTab">
+	 	{% for key,value in series_list %}
+	 		{% for seg in value %}
+	 			{%if forloop.first %}
+	 				<li class="active" ><a href="#{{ seg }}segment">{{ seg }}段</a></li>
+	 			{% else %} 
+	 				<li><a href="#{{ seg }}segment">{{ seg }}段</a></li><!--  data-toggle='tab' -->
+	 			{% endif %}
+			{% endfor %}
+		{% endfor %}	    
+    </ul> 
+    <div class="tab-content"> 
+	 	{% for key,value in series_list %}
+	 		{% for seg in value %}
+	 			{%if forloop.first %}
+					<div class="tab-pane active" id="{{ seg }}segment">
+				{% else %} 
+					<div class="tab-pane" id="{{ seg }}segment">
+				{% endif %}
+						<div class="row">
+						<div class="col-md-10 col-sm-10">
+							<canvas id="canvas-{{ key }}-{{ seg }}" ></canvas>
 						</div>
-						<div id="legend-{{ key }}-{{ seg }}"></div>
-				{% endfor %}	    	
-		    </li>
+						<div id="legend-{{ key }}-{{ seg }}"></div>			
+						</div>
+					</div>
+			{% endfor %}
 		{% endfor %}
-		</ul>
-	</div>
+    </div>
 
-<!-- jQuery文件。务必在bootstrap.min.js 之前引入
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入-->
 <script src="http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js"></script>
-<!-- 最新的 Bootstrap 核心 JavaScript 文件
-<script src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> -->
+<!-- 最新的 Bootstrap 核心 JavaScript 文件-->
+<script src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> 
 
 <script>
 {% for chartid, chartdata in chartdata_list %}
@@ -69,11 +82,21 @@
 window.onload = function(){
 {% for chartid, realchartid in realchartIds %}
 	var ctx_{{ chartid }} = document.getElementById("canvas-{{ realchartid }}").getContext("2d"); //<!-- chartid =  {{ series }}-{{ seg }}-->
-	var chart_{{ chartid }} = new Chart(ctx_{{ chartid }}).Line( {{ chartid }}, {	animation: false, responsive: true, bezierCurve: false});
+	//var ctx_{{ chartid }} = $('#canvas-{{ realchartid }}').getContext("2d");
+	chart_{{ chartid }} = new Chart(ctx_{{ chartid }}).Line( {{ chartid }}, {	animation: false, responsive: true, bezierCurve: false, pointDotRadius: 12, scaleShowLabels: true, datasetStrokeWidth: 3 });
 	//var legend_{{ chartid }} = chart_{{ chartid }}.generateLegend();
 	//$("#legend-{{ realchartid }}").html(legend_{{ chartid }});
 	legend(document.getElementById("legend-{{ realchartid }}"), {{ chartid }});
 {% endfor %}
+
+$(function () { 
+	$('#myTab a:first').tab('show');//初始化显示哪个tab 
+
+	$('#myTab a').click(function (e) { 
+	  e.preventDefault();//阻止a链接的跳转行为 
+	  $(this).tab('show');//显示当前选中的链接及关联的content 
+	}) 
+}) 
 }
 </script>
 </body>

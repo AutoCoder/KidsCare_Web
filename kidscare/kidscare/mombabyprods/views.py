@@ -131,14 +131,19 @@ def RenderSeriesCharts(dictdata, series):
             if isremovable:
                 del dictdata[segKey]
                 
-    preprocess_dictdata()        
-    brandname = QueryHandler.BrandName(QueryHandler.ESeries2Series[series])
-    isbrand_passed = True if brandname else False
+    preprocess_dictdata()
+    series_zh = QueryHandler.ESeries2Series[series]
+    brandname = QueryHandler.BrandName(series_zh)   
+    if brandname:
+        page_title = "%s -> %s" % (brandname, series_zh)
+    else:
+        page_title = "%s" % (series_zh)
+                               
     origDict = {}
-    origDict[QueryHandler.ESeries2Series[series]] = dictdata
+    origDict[series_zh] = dictdata
     chartdata_list = preprocessTrendData(origDict)
     c = Context({
-                 'brand_passed' : isbrand_passed,
+                 'page_title' : page_title,
                  'brand' : brandname,
                  'series_list': origDict.items(),
                  'chartdata_list': chartdata_list,
