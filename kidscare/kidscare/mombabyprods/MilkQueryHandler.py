@@ -3,8 +3,11 @@ import platform
 from kidscare.settings import DbHost
 from models import MilkBrand, MilkProd, MilkSeries, MilkTunnel
 
-DbConn = MySQLdb.connect(host=DbHost, user='spider',passwd='wodemima',port=3306, charset='utf8')
-DbConn.select_db('Mom_Baby')   
+try:
+    DbConn = MySQLdb.connect(host=DbHost, user='spider',passwd='wodemima',port=3306, charset='utf8')
+    DbConn.select_db('Mom_Baby')
+except Exception,info:
+    assert(False)	   
 
 class QueryHandler(object):
     Tunnels2Ltunnels = {}
