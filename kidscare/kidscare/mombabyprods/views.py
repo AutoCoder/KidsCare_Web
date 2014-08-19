@@ -2,7 +2,7 @@ from django.shortcuts import render
 from django.http import HttpResponse
 from django.template import Template, Context
 
-from MilkQueryHandler import QueryHandler
+from MilkQueryHandler import QueryHandler as MQH
 from kidscare.settings import TEMPLATE_DIR
 from kidscare.Profiler import profile
 from WeiXinHandler import WeiXinHandler
@@ -26,18 +26,18 @@ def handleWXHttpRequest(request):
     
 #@profile("1000.prof")
 def seriesofbrand(request, ebrand, brand=None, msg={'ToUserName':'lilei', 'FromUserName':'hanmeimei'}):
-    branda = brand if brand else QueryHandler.EBrand2Brand[ebrand] 
+    branda = brand if brand else MQH.EBrand2Brand[ebrand] 
     return HttpResponse(WeiXinHandler.reponse_seriescharts(branda, msg))
        
 #@profile("2000.prof") 
 def trendofseries(request, series):
-    data = QueryHandler.TrendDataOfSeries(QueryHandler.ESeries2Series[series], 10, 3)
+    data = MQH.TrendDataOfSeries(MQH.ESeries2Series[series], 10, 3)
     html =  RenderSeriesCharts(data, series)
     return HttpResponse(html)   
 
 def trendofbrand(request, ebrand):
-    brandc = QueryHandler.EBrand2Brand[ebrand] 
-    data = QueryHandler.TrendDataOfBrand(brandc, 10, 3)
+    brandc = MQH.EBrand2Brand[ebrand] 
+    data = MQH.TrendDataOfBrand(brandc, 10, 3)
     html = RenderBrandCharts(data, brandc)
     return HttpResponse(html)   
 
@@ -45,7 +45,7 @@ def preprocessTrendData(dictdata):
     chartdata_list = []
     for seriesName,seriesData in dictdata.items():
         for seg, chartdata in seriesData.items():
-            chartid = (u"%s_%d" % (seriesName, seg)).replace('-','_')
+            chartid = seg#(u"%s_%d" % (seriesName, seg)).replace('-','_')
             chartdatatempl = """{labels : %s, datasets : [ %s ]}"""
             #list all scrapy date(unique) 
             labels = []
@@ -88,12 +88,24 @@ def preprocessTrendData(dictdata):
             tempstr = """{label: "%s", fillColor : "rgba(%s,0.2)", strokeColor : "rgba(%s,1)", pointColor : "rgba(%s,1)", pointStrokeColor : "#fff", pointHighlightFill : "#fff", pointHighlightStroke : "rgba(%s,1)", prodlink : "%s", data : %s},"""
             datasetsStr = ''
             for tunnel, trenddata in tunneldictlist.items():
-                datasetsStr += tempstr % (tunnel, colorset[tunnel], colorset[tunnel], colorset[tunnel], colorset[tunnel], linkdict[tunnel], trenddata)
+                datasetsStr += tempstr % (MQH.Tunnels2Ltunnels[tunnel], colorset[tunnel], colorset[tunnel], colorset[tunnel], colorset[tunnel], linkdict[tunnel], trenddata)
                 
             chartdata = chartdatatempl % (labelStrList, datasetsStr)
             chartdata_list.append((chartid, chartdata))
             
     return chartdata_list
+
+def prepareTableData(seriesName):
+    tableSegDict = {}
+    for seg in xrange(1,5):
+        tabledata = []
+        for tunnel in MQH.Tunnels2Ltunnels.keys():
+            prod = MQH.getLatestprods(seriesName, tunnel, seg) # return MilkProd
+            if prod:
+                tabledata.append((MQH.Tunnels2Ltunnels[tunnel], prod))
+            
+        tableSegDict[seg] = tabledata
+    return tableSegDict
 
 def RenderBrandCharts(dictdata, brand):
     fp = open(TEMPLATE_DIR + '/chart_templ')
@@ -107,7 +119,7 @@ def RenderBrandCharts(dictdata, brand):
                  'brand' : brand,
                  'series_list': dictdata.items(),
                  'chartdata_list': chartdata_list,
-                 'realchartIds' : [ (item[0], item[0].replace('_','-')) for item in chartdata_list ]
+                 #'realchartIds' : [ (item[0], item[0].replace('_','-')) for item in chartdata_list ]
                  })
     html = t.render(c)
     return html
@@ -132,21 +144,21 @@ def RenderSeriesCharts(dictdata, series):
                 del dictdata[segKey]
                 
     preprocess_dictdata()
-    series_zh = QueryHandler.ESeries2Series[series]
-    brandname = QueryHandler.BrandName(series_zh)   
+    series_zh = MQH.ESeries2Series[series]
+    brandname = MQH.BrandName(series_zh)   
     if brandname:
-        page_title = "%s -> %s" % (brandname, series_zh)
+        page_title = "%s & %s" % (brandname, series_zh)
     else:
         page_title = "%s" % (series_zh)
                                
     origDict = {}
     origDict[series_zh] = dictdata
-    chartdata_list = preprocessTrendData(origDict)
+    chartdata_list = preprocessTrendData(origDict) # return adapted data for chart
+    
+    tabledatadict = prepareTableData(series_zh)
     c = Context({
                  'page_title' : page_title,
-                 'brand' : brandname,
-                 'series_list': origDict.items(),
+                 "tabledata_list" : tabledatadict.items(),
                  'chartdata_list': chartdata_list,
-                 'realchartIds' : [ (item[0], item[0].replace('_','-')) for item in chartdata_list ]
                  })
     return t.render(c)

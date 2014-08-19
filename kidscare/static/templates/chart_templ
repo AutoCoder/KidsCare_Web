@@ -40,32 +40,57 @@
 	 <h1>{{ page_title }}</h1>
 	 </div>
 	 <ul class="nav nav-tabs" id="myTab">
-	 	{% for key,value in series_list %}
-	 		{% for seg in value %}
-	 			{%if forloop.first %}
-	 				<li class="active" ><a href="#{{ seg }}segment">{{ seg }}段</a></li>
-	 			{% else %} 
-	 				<li><a href="#{{ seg }}segment">{{ seg }}段</a></li><!--  data-toggle='tab' -->
-	 			{% endif %}
-			{% endfor %}
+	 	{% for seg,value in tabledata_list %}
+ 			{%if forloop.first %}
+ 				<li class="active" ><a href="#tab-{{ seg }}">{{ seg }}段</a></li>
+ 			{% else %} 
+ 				<li><a href="#tab-{{ seg }}">{{ seg }}段</a></li><!--  data-toggle='tab' -->
+ 			{% endif %}
 		{% endfor %}	    
     </ul> 
     <div class="tab-content"> 
-	 	{% for key,value in series_list %}
-	 		{% for seg in value %}
-	 			{%if forloop.first %}
-					<div class="tab-pane active" id="{{ seg }}segment">
-				{% else %} 
-					<div class="tab-pane" id="{{ seg }}segment">
-				{% endif %}
-						<div class="row">
-						<div class="col-md-10 col-sm-10">
-							<canvas id="canvas-{{ key }}-{{ seg }}" ></canvas>
-						</div>
-						<div id="legend-{{ key }}-{{ seg }}"></div>			
+	 	{% for seg,tableitem in tabledata_list %}
+ 			{%if forloop.first %}
+				<div class="tab-pane active" id="tab-{{ seg }}">
+			{% else %} 
+				<div class="tab-pane" id="tab-{{ seg }}">
+			{% endif %}
+					<div class="row">
+				        <div class="col-md-12 col-sm-12 "><!-- col-md-offset-1 col-sm-offset-1 -->
+							<table class="table table-striped">
+								<thead>
+								  	<tr>
+									    <th>#</th>
+									    <th>总价(￥)</th>
+									    <th>重量(g)</th>
+									    <th>单价（￥/100g）</th>
+									    <th>购买链接</th>
+								  	</tr>
+								</thead>
+								<tbody>
+									{% for tunnelkey,prod in tableitem %}
+								  	<tr>
+									    <td>{{ tunnelkey }}</td>
+									    <td>{{ prod.price}}</td>
+									    <td>{{ prod.volume }}</td>
+									    <td>{{ prod.unitprice }}</td>
+									    <td><button type="button" class="btn btn-success"><a href="{{ prod.prod_link }}">去购买</a></button></td>
+								  	</tr>
+								  	{% endfor %}
+								</tbody>
+							</table>
 						</div>
 					</div>
-			{% endfor %}
+
+					<div class="row">
+					<div class="col-md-10 col-sm-10"><!--  col-md-offset-1 col-sm-offset-1 -->
+						<canvas id="canvas_{{ seg }}" ></canvas>
+					</div>
+					<div id="legend_{{ seg }}"></div>			
+					</div>
+
+				</div>
+
 		{% endfor %}
     </div>
 
@@ -76,17 +101,17 @@
 
 <script>
 {% for chartid, chartdata in chartdata_list %}
-	var {{ chartid }} = {{ chartdata|safe }};
+	var chartdata_{{ chartid }} = {{ chartdata|safe }};
 {% endfor %}
 
 window.onload = function(){
-{% for chartid, realchartid in realchartIds %}
-	var ctx_{{ chartid }} = document.getElementById("canvas-{{ realchartid }}").getContext("2d"); //<!-- chartid =  {{ series }}-{{ seg }}-->
+{% for chartid, chartdata in chartdata_list %}
+	var ctx_{{ chartid }} = document.getElementById("canvas_{{ chartid }}").getContext("2d"); //<!-- chartid =  {{ series }}-{{ seg }}-->
 	//var ctx_{{ chartid }} = $('#canvas-{{ realchartid }}').getContext("2d");
-	chart_{{ chartid }} = new Chart(ctx_{{ chartid }}).Line( {{ chartid }}, {	animation: false, responsive: true, bezierCurve: false, pointDotRadius: 12, scaleShowLabels: true, datasetStrokeWidth: 3 });
+	chart_{{ chartid }} = new Chart(ctx_{{ chartid }}).Line( chartdata_{{ chartid }}, {	animation: false, responsive: true, bezierCurve: false, pointDotRadius: 10, scaleShowLabels: true, datasetStrokeWidth: 3 });
 	//var legend_{{ chartid }} = chart_{{ chartid }}.generateLegend();
 	//$("#legend-{{ realchartid }}").html(legend_{{ chartid }});
-	legend(document.getElementById("legend-{{ realchartid }}"), {{ chartid }});
+	legend(document.getElementById("legend_{{ chartid }}"), chartdata_{{ chartid }});
 {% endfor %}
 
 $(function () { 

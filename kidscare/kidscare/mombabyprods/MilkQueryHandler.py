@@ -1,7 +1,8 @@
 import MySQLdb
-import platform
+import datetime
 from kidscare.settings import DbHost
 from models import MilkBrand, MilkProd, MilkSeries, MilkTunnel
+
 
 def connectdb():
     try:
@@ -68,6 +69,16 @@ class QueryHandler(object):
                         cheapest = temp
             cheapest_prod.append(cheapest)
         return cheapest_prod
+    
+    @staticmethod
+    def getLatestprods(series, tunnelName, seg):
+        now = datetime.datetime.now()
+        start = now - datetime.timedelta(hours=23, minutes=59, seconds=59)
+        count = MilkProd.objects.filter(name=series, tunnel=tunnelName, segment=seg, scrapy_time__gt=start).count()
+        if count:
+            return MilkProd.objects.filter(name=series, tunnel=tunnelName, segment=seg, scrapy_time__gt=start).order_by('unitprice')[0]
+        else:
+            return None 
     
     @staticmethod
     def GetTrendData(ser, segment, tunnel, duration, interval):# (duration , interval) unit = day
