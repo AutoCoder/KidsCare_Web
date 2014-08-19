@@ -3,11 +3,25 @@ import platform
 from kidscare.settings import DbHost
 from models import MilkBrand, MilkProd, MilkSeries, MilkTunnel
 
-try:
-    DbConn = MySQLdb.connect(host=DbHost, user='spider',passwd='wodemima',port=3306, charset='utf8')
-    DbConn.select_db('Mom_Baby')
-except Exception,info:
-    assert(False)	   
+def connectdb():
+    try:
+        conn = MySQLdb.connect(host=DbHost, user='spider',passwd='wodemima',port=3306, charset='utf8')
+        conn.select_db('Mom_Baby')
+        return conn
+    except:
+        assert(False)
+        
+Dbconnection = connectdb()
+        
+def DbConn():
+    global Dbconnection
+    try:
+        Dbconnection.ping()
+    except Exception,info:
+        print "%s" % info
+        Dbconnection = connectdb()
+    
+    return Dbconnection
 
 class QueryHandler(object):
     Tunnels2Ltunnels = {}
@@ -61,7 +75,7 @@ class QueryHandler(object):
         try:
             #QueryHandler.conn.select_db('Mom_Baby')
             subsection = int(duration / interval)
-            cur = DbConn.cursor()
+            cur = DbConn().cursor()
             sql = u"""Select tunnel, brand, segment, name, price, unitprice, volume, pic_link, prod_link, scrapy_time FROM
                     (SELECT tunnel, brand, segment, name, price, unitprice, volume, pic_link, prod_link, scrapy_time,
                     timestampdiff (hour, scrapy_time, NOW()) AS intervals 
