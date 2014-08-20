@@ -31,7 +31,7 @@ def seriesofbrand(request, ebrand, brand=None, msg={'ToUserName':'lilei', 'FromU
        
 #@profile("2000.prof") 
 def trendofseries(request, series):
-    data = MQH.TrendDataOfSeries(MQH.ESeries2Series[series], 10, 3)
+    data = MQH.TrendDataOfSeries(MQH.ESeries2Series[series], 20, 5)
     html =  RenderSeriesCharts(data, series)
     return HttpResponse(html)   
 
