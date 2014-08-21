@@ -1,6 +1,6 @@
 import MySQLdb
 import datetime
-from kidscare.settings import DbHost
+from kidscare.settings import DbHost, PicRelativeLink
 from models import MilkBrand, MilkProd, MilkSeries, MilkTunnel
 
 
@@ -69,6 +69,15 @@ class QueryHandler(object):
                         cheapest = temp
             cheapest_prod.append(cheapest)
         return cheapest_prod
+    
+    @staticmethod 
+    def getPicLinkforSeries(seriesName):
+        try:
+            seriesObj = MilkSeries.objects.filter(name=seriesName)[0]
+            piclink = PicRelativeLink + "%s-%s.jpg" % (seriesObj.ebrandin, seriesObj.ename)
+            return piclink
+        except Exception,info:
+            print info
     
     @staticmethod
     def getLatestprods(series, tunnelName, seg):

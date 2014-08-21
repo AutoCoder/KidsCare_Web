@@ -120,3 +120,4 @@ else:
     MOMBABY_HOST = '10.31.186.63:8004'
     DbHost = '10.31.186.63'
     
+PicRelativeLink = "http://bcs.duapp.com/mombaby/MilkImage/"

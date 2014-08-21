@@ -78,7 +78,7 @@ class WeiXinHandler:
                 showdict = {}
                 showdict['seriesName'] = item.name
                 showdict['title'] = u'%s %d\u6bb5%dg \u6700\u4f4e\u4ef7%d\u5143 ' % (QueryHandler.Tunnels2Ltunnels[item.tunnel], item.segment, item.volume, item.price )
-                showdict['picurl'] = item.pic_link
+                showdict['picurl'] = QueryHandler.getPicLinkforSeries(item.name)#item.pic_link
                 showdict['url'] = u"http://%s/milk/series/%s/trend" % (MOMBABY_HOST, QueryHandler.Series2ESeries[item.name])
                 contextlist.append(showdict)
             return contextlist 
