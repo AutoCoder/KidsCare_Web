@@ -55,9 +55,9 @@ class WeiXinHandler:
     def supported_brandlist(msg):
         brands = QueryHandler.Brands()
         brandlistStr = u"\u8bf7\u8f93\u5165\u54c1\u724c\u540d\u79f0\u6216\u5e8f\u53f7\uff1a\n";
-        for idx in xrange(len(brands)):
-            brandlistStr += u"(%d) %s     " % (100+idx, brands[idx])
-            if idx and idx % 3 == 0:
+        for idx in xrange(1, len(brands)+1):
+            brandlistStr += u"(%d) %s     " % (100 + idx, brands[idx])
+            if idx % 3 == 0:
                 brandlistStr += u'\n'
         
         c = Context({
