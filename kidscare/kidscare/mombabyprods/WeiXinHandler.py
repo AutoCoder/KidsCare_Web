@@ -154,7 +154,14 @@ class WeiXinHandler:
     @staticmethod
     def record_wxuserinput(msg):
         try:
-            wxinput = WxUserinput(input=msg['Content'],wxuseraccout=msg['FromUserName'])
+            translatedInput = msg['Content']
+            if translatedInput.isdigit():
+                index = int (translatedInput)
+                if index > 100 and index < 200:
+                    translatedInput = QueryHandler.BrandNameByIndex(index - 100)
+                elif index > 200:
+                    pass #niaobushi mapping 
+            wxinput = WxUserinput(input=translatedInput,wxuseraccout=msg['FromUserName'])
             wxinput.save()
         except Exception, info:
             print "exceptions %s" % info
