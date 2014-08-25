@@ -54,9 +54,9 @@ class WeiXinHandler:
     @staticmethod
     def supported_brandlist(msg):
         brands = QueryHandler.Brands()
-        brandlistStr = u"\u8bf7\u8f93\u5165\u54c1\u724c\u540d\u79f0\u6216\u5e8f\u53f7\uff1a";
+        brandlistStr = u"\u8bf7\u8f93\u5165\u54c1\u724c\u540d\u79f0\u6216\u5e8f\u53f7\uff1a\n";
         for idx in xrange(len(brands)):
-            brandlistStr += u"(%d) %s   " % (100+idx, brands[idx])
+            brandlistStr += u"(%d) %s     " % (100+idx, brands[idx])
             if idx % 3 == 0:
                 brandlistStr += u'\n'
         
@@ -106,7 +106,7 @@ class WeiXinHandler:
     
     @staticmethod
     def response_subscribe(msg):
-        welcome_str = u"""\u6b22\u8fce\u5173\u6ce8\u6bcd\u5a74\u7528\u54c1\u6bd4\u4ef7\u5fae\u4fe1\u53f7\uff0c\u53ef\u4ee5\u56de\u590d\u5976\u7c89\u54c1\u724c\u5982\u60e0\u6c0f\uff0c\u67e5\u8be2\u5f53\u524d\u5404\u5927\u7535\u5546\u6700\u4f4e\u4ef7\uff08\u56de\u590d\u5976\u7c89\u67e5\u8be2\u5f53\u524d\u6536\u5f55\u7684\u54c1\u724c\uff09"""
+        welcome_str = u"""\u672c\u53f7\u7684\u76ee\u6807\u662f\uff1a\u5feb\u901f\u67e5\u8be2\u5f53\u524d\u5404\u5927\u7535\u5546\u6700\u4f4e\u4ef7\uff0c\u64b8\u5c3d\u5404\u79cd\u7f8a\u6bdb\u3002\u000d\u000a\u56de\u590d\u5976\u7c89\u54c1\u724c\u5982\u3010\u60e0\u6c0f\u3011\uff0c\u67e5\u8be2\u5f53\u524d\u5404\u5927\u7535\u5546\u6700\u4f4e\u4ef7\u000d\u000a\u56de\u590d\u3010\u5976\u7c89\u3011\uff0c\u67e5\u8be2\u672c\u53f7\u6536\u5f55\u7684\u6240\u6709\u5976\u7c89\u54c1\u724c"""
         c = Context({
                  'ToUserName' : msg['FromUserName'],
                  'FromUserName': msg['ToUserName'],
