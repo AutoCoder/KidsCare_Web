@@ -101,12 +101,14 @@ class MilkBrand(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=20)
     ename = models.CharField(max_length=20)
+    querycount = models.IntegerField()
+    queryrank = models.IntegerField()
     class Meta:
         managed = False
         db_table = 'milk_brand'
 
 class MilkProd(models.Model):
-    id = models.IntegerField(db_column='Id', primary_key=True) # Field name made lowercase.
+    id = models.IntegerField(primary_key=True, db_column='Id') # Field name made lowercase.
     tunnel = models.CharField(max_length=20)
     brand = models.CharField(max_length=20)
     name = models.CharField(max_length=20)
