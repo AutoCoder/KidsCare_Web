@@ -39,9 +39,18 @@ class QueryHandler(object):
         ESeries2Series[item.ename] = item.name
     
     @staticmethod
-    def Brands():
-        return [item.name for item in MilkBrand.objects.all()]
-    
+    def Brands(isranked=True):
+        if isranked:
+            return [item.name for item in MilkBrand.objects.all().order_by('queryrank')]
+        else:
+            return [item.name for item in MilkBrand.objects.all()]
+        
+    @staticmethod
+    def BrandNameByIndex(rankindex):
+        brandset = MilkBrand.objects.filter(queryrank=rankindex)
+        if brandset.count() == 1:
+            return brandset[0].name
+        
     @staticmethod
     def BrandName(series):
         brandset = MilkSeries.objects.filter(name=series)

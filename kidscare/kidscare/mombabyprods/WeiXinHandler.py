@@ -46,6 +46,12 @@ class WeiXinHandler:
             wxinput = msg["Content"]
             if wxinput in QueryHandler.Brand2EBrand.keys():
                 return WeiXinHandler.reponse_seriescharts(wxinput, msg)
+            elif wxinput.isdigit():
+                brandName = WeiXinHandler.brandindex2Name(int(wxinput))
+                if brandName in QueryHandler.Brand2EBrand.keys():
+                    return WeiXinHandler.reponse_seriescharts(brandName, msg)
+                else:
+                    print "exception when input digital"
             elif wxinput == u'\u5976\u7c89': # unicode 'naifen'
                 return WeiXinHandler.supported_brandlist(msg)
             else:
@@ -74,6 +80,13 @@ class WeiXinHandler:
         xmlReply = t.render(c)
         return xmlReply
     
+    @staticmethod
+    def brandindex2Name(index):
+        if index > 100 and index < 200:
+            return QueryHandler.BrandNameByIndex(index - 100)
+        else:
+            return None
+        
     @staticmethod
     def reponse_seriescharts(wxinput, msg):
         show_list = QueryHandler.Series(wxinput)
