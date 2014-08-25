@@ -33,9 +33,7 @@
     <script src="http://bcs.duapp.com/mombaby/js/chartjs/Chart.min.js"></script><!-- <script src="http://apps.bdimg.com/libs/Chart.js/0.2.0/Chart.min.js"></script> -->
 </head>
 <body role="document">
-	 <div class="page-header">
 	 <h3>{{ page_title }}</h3>
-	 </div>
 	 <ul class="nav nav-tabs" id="myTab">
 	 	{% for seg,value in tabledata_list %}
  			{%if forloop.first %}
@@ -57,11 +55,11 @@
 							<table class="table table-striped">
 								<thead>
 								  	<tr>
-									    <th width="20%">#</th>
-									    <th width="20%">总价(￥)</th>
-									    <th width="20%">重量(g)</th>
-									    <th width="20%">单价（￥/100g）</th>
-									    <th width="20%">购买链接</th>
+									    <th width="22%">电商</th>
+									    <th width="19%">总价￥</th>
+									    <th width="17%">重量g</th>
+									    <th width="25%">单价(100g)</th>
+									    <th width="17%">购买链接</th>
 								  	</tr>
 								</thead>
 								<tbody>
@@ -87,7 +85,8 @@
     </div>
 
 	<div class="row">
-	<div class="col-md-12 col-sm-12 col-xs-12"><!--  col-md-offset-1 col-sm-offset-1 -->
+	<div class="col-md-11 col-sm-11 col-xs-11 col-md-offset-1 col-sm-offset-1"><!--  col-md-offset-1 col-sm-offset-1 -->
+		<div class="row"><center>价格波动示意图</center></div>
 		<canvas id="canvas" ></canvas>
 	</div>	
 	</div>
