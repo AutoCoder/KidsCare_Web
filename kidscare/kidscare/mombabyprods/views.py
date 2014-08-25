@@ -102,7 +102,7 @@ def prepareTableData(seriesName):
         for tunnel in MQH.Tunnels2Ltunnels.keys():
             prod = MQH.getLatestprods(seriesName, tunnel, seg) # return MilkProd
             if prod:
-                tabledata.append((MQH.Tunnels2Ltunnels[tunnel], prod))
+                tabledata.append((MQH.Tunnels2Ltunnels[tunnel], prod, colorset[tunnel]))
             
         tableSegDict[seg] = tabledata
     return tableSegDict
@@ -125,7 +125,7 @@ def RenderBrandCharts(dictdata, brand):
     return html
     
 def RenderSeriesCharts(dictdata, series):
-    fp = open(TEMPLATE_DIR + '/chart_templ')
+    fp = open(TEMPLATE_DIR + '/chart_templ2')
     t = Template(fp.read())
     fp.close()
     #dict = { "S-26" : { 1:{ 'suning': [0.1,0.2,0.3,0.4], 'tmall' : [0.1,0.2,0.3,0.4]}, 2:{'suning': [0.1,0.2,0.3,0.4], 'tmall' : [0.1,0.2,0.3,0.4]}, 3:{'suning': [0.1,0.2,0.3,0.4], 'tmall' : [0.1,0.2,0.3,0.4]}, 4:{'suning': [0.1,0.2,0.3,0.4], 'tmall' : [0.1,0.2,0.3,0.4]}} } 

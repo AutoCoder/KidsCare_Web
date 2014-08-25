@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta name="language" content="zh_cn" />
+    <title>比价图</title>
+	<!-- 新 Bootstrap 核心 CSS 文件 -->
+    <!-- <link rel="stylesheet" href="http://lib.sinaapp.com/js/bootstrap/3.0.0/css/bootstrap.min.css"> --> <!-- sae cdn service -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.min.css"><!-- bootstrap cdn service -->
+	<!-- <link rel="stylesheet" type="text/css" href="http://bcs.duapp.com/mombaby/css/chart.css"> -->
+	<style type="text/css">
+		#fork {
+		    position: absolute;
+		    top: 0;
+		    right: 0;
+		    border: 0;
+		}
+
+		.legend {
+		    border: 1px solid black;
+		}
+
+		.legend .title {
+		    display: block;
+		    margin: 0.5em;
+		    border-style: solid;
+		    border-width: 0 0 0 2em;
+		    padding: 0 1em;
+		}
+	 </style>
+    <script src="http://bcs.duapp.com/mombaby/js/chartjs/Chart.min.js"></script><!-- <script src="http://apps.bdimg.com/libs/Chart.js/0.2.0/Chart.min.js"></script> -->
+</head>
+<body role="document">
+	 <div class="page-header">
+	 <h3>{{ page_title }}</h3>
+	 </div>
+	 <ul class="nav nav-tabs" id="myTab">
+	 	{% for seg,value in tabledata_list %}
+ 			{%if forloop.first %}
+ 				<li class="active" ><a id="{{ seg }}" href="#tab-{{ seg }}">{{ seg }}段</a></li>
+ 			{% else %} 
+ 				<li ><a id="{{ seg }}" href="#tab-{{ seg }}">{{ seg }}段</a></li><!--  data-toggle='tab' -->
+ 			{% endif %}
+		{% endfor %}	    
+    </ul> 
+    <div class="tab-content"> 
+	 	{% for seg,tableitem in tabledata_list %}
+ 			{%if forloop.first %}
+				<div class="tab-pane active" id="tab-{{ seg }}">
+			{% else %} 
+				<div class="tab-pane" id="tab-{{ seg }}">
+			{% endif %}
+					<div class="row">
+				        <div class="col-md-12 col-sm-12 col-xs-12"><!-- col-md-offset-1 col-sm-offset-1 -->
+							<table class="table table-striped">
+								<thead>
+								  	<tr>
+									    <th width="20%">#</th>
+									    <th width="20%">总价(￥)</th>
+									    <th width="20%">重量(g)</th>
+									    <th width="20%">单价（￥/100g）</th>
+									    <th width="20%">购买链接</th>
+								  	</tr>
+								</thead>
+								<tbody>
+									{% for tunnelkey,prod,legendcolor in tableitem %}
+								  	<tr>
+									    <td><span class="title" style="border-color: rgba({{ legendcolor }},1); border-Style: solid;"></span>{{ tunnelkey }}</td>
+									    <td>{{ prod.price}}</td>
+									    <td>{{ prod.volume }}</td>
+									    <td>{{ prod.unitprice }}</td>
+									    <td><button type="button" class="btn btn-success"><a href="{{ prod.prod_link }}">去购买</a></button></td>
+								  	</tr>
+								  	{% endfor %}
+								</tbody>
+							</table>
+						</div>
+					</div>
+
+
+
+				</div>
+
+		{% endfor %}
+    </div>
+
+	<div class="row">
+	<div class="col-md-12 col-sm-12 col-xs-12"><!--  col-md-offset-1 col-sm-offset-1 -->
+		<canvas id="canvas" ></canvas>
+	</div>	
+	</div>
+
+<!-- jQuery文件。务必在bootstrap.min.js 之前引入-->
+<script src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script><!-- http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js
+<!-- 最新的 Bootstrap 核心 JavaScript 文件-->
+<!-- <script src="http://lib.sinaapp.com/js/bootstrap/3.0.0/js/bootstrap.min.js"></script> --> <!-- sae cdn service -->
+<script src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> <!-- bootstrap cdn service -->
+<!-- http://apps.bdimg.com/libs/bootstrap/3.2.0/js/bootstrap.min.js --><!-- bae cdn service -->
+
+<script>
+{% for chartid, chartdata in chartdata_list %}
+	var chartdata_{{ chartid }} = {{ chartdata|safe }};
+{% endfor %}
+
+$(function () { 
+	$('#myTab a:first').tab('show');//初始化显示哪个tab 
+	reloadchart(1);
+	$('#myTab a').click(function (e) { 
+	  // e.preventDefault();//阻止a链接的跳转行为 
+	  reloadchart(e.currentTarget.id);
+	  $(this).tab('show');//显示当前选中的链接及关联的content 
+	}) 
+}) 
+
+function reloadchart(seg){
+	lineChartData = null
+	if (seg == 1)
+	{
+		lineChartData = chartdata_1
+	}
+	else if(seg == 2)
+	{
+		lineChartData = chartdata_2
+	}
+	else if(seg == 3)
+	{
+		lineChartData = chartdata_3
+	}
+	else if(seg == 4)
+	{
+		lineChartData = chartdata_4
+	}
+
+	if (lineChartData == null)
+		return;
+	else{
+		var ctx = document.getElementById("canvas").getContext("2d");
+		window.myLine = new Chart(ctx).Line(lineChartData, { animation: false,
+			responsive: true, bezierCurve: false, pointDotRadius: 6, datasetStrokeWidth: 3, scaleShowLabels: true,
+		});
+	}	
+}
+
+</script>
+</body>
+</html>
