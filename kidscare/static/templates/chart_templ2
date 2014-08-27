@@ -52,6 +52,7 @@
 			{% endif %}
 					<div class="row">
 				        <div class="col-md-12 col-sm-12 col-xs-12"><!-- col-md-offset-1 col-sm-offset-1 -->
+				        	{%if tableitem %}
 							<table class="table table-striped">
 								<thead>
 								  	<tr>
@@ -74,6 +75,7 @@
 								  	{% endfor %}
 								</tbody>
 							</table>
+							{% endif %}
 						</div>
 					</div>
 
@@ -86,7 +88,7 @@
 
 	<div class="row">
 	<div class="col-md-11 col-sm-11 col-xs-11"><!--  col-md-offset-1 col-sm-offset-1 -->
-		<div class="row"><center>价格波动示意图</center></div>
+		<div id="ChartTitleId" class="row"><center>价格波动示意图</center></div>
 		<canvas id="canvas" ></canvas>
 	</div>	
 	</div>
@@ -99,6 +101,10 @@
 <!-- http://apps.bdimg.com/libs/bootstrap/3.2.0/js/bootstrap.min.js --><!-- bae cdn service -->
 
 <script>
+chartdata_1 = null;
+chartdata_2 = null;
+chartdata_3 = null;
+chartdata_4 = null;
 {% for chartid, chartdata in chartdata_list %}
 	var chartdata_{{ chartid }} = {{ chartdata|safe }};
 {% endfor %}
@@ -133,12 +139,18 @@ function reloadchart(seg){
 	}
 
 	if (lineChartData == null)
+	{
+		window.myLine.chart.canvas.hidden = true;
+		$('#ChartTitleId')[0].hidden = true;
 		return;
+	}
 	else{
 		var ctx = document.getElementById("canvas").getContext("2d");
 		window.myLine = new Chart(ctx).Line(lineChartData, { animation: false,
 			responsive: true, bezierCurve: false, pointDotRadius: 6, datasetStrokeWidth: 3, scaleShowLabels: true,
 		});
+		window.myLine.chart.canvas.hidden = false;
+		$('#ChartTitleId')[0].hidden = false;
 	}	
 }
 
