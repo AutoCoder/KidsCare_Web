@@ -70,7 +70,7 @@
 									    <td>{{ prod.price}}</td>
 									    <td>{{ prod.volume }}</td>
 									    <td>{{ prod.unitprice }}</td>
-									    <td><button type="button" class="btn btn-success"><a href="{{ prod.prod_link }}">去购买</a></button></td>
+									    <td><button type="button" class="btn btn-warning"><a href="{{ prod.prod_link }}">去购买</a></button></td>
 								  	</tr>
 								  	{% endfor %}
 								</tbody>
