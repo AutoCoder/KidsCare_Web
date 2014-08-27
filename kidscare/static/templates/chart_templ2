@@ -37,9 +37,9 @@
 	 <ul class="nav nav-tabs" id="myTab">
 	 	{% for seg,value in tabledata_list %}
  			{%if forloop.first %}
- 				<li class="active" ><a id="{{ seg }}" href="#tab-{{ seg }}">{{ seg }}段</a></li>
+ 				<li class="active" ><a style="font-size:1.4em" id="{{ seg }}" href="#tab-{{ seg }}">{{ seg }}  段</a></li>
  			{% else %} 
- 				<li ><a id="{{ seg }}" href="#tab-{{ seg }}">{{ seg }}段</a></li><!--  data-toggle='tab' -->
+ 				<li><a style="font-size:1.4em" id="{{ seg }}" href="#tab-{{ seg }}">{{ seg }}  段</a></li><!--  data-toggle='tab' -->
  			{% endif %}
 		{% endfor %}	    
     </ul> 
@@ -85,7 +85,7 @@
     </div>
 
 	<div class="row">
-	<div class="col-md-11 col-sm-11 col-xs-11 col-md-offset-1 col-sm-offset-1"><!--  col-md-offset-1 col-sm-offset-1 -->
+	<div class="col-md-11 col-sm-11 col-xs-11"><!--  col-md-offset-1 col-sm-offset-1 -->
 		<div class="row"><center>价格波动示意图</center></div>
 		<canvas id="canvas" ></canvas>
 	</div>	
