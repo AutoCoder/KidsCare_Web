@@ -8,7 +8,7 @@
     <title>比价图</title>
 	<!-- 新 Bootstrap 核心 CSS 文件 -->
     <!-- <link rel="stylesheet" href="http://lib.sinaapp.com/js/bootstrap/3.0.0/css/bootstrap.min.css"> --> <!-- sae cdn service -->
-    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.min.css"><!-- bootstrap cdn service -->
+    <link rel="stylesheet" href="http://121.40.99.4/static/bootstrap/css/bootstrap.min.css"><!-- bootstrap cdn service -->
 	<!-- <link rel="stylesheet" type="text/css" href="http://bcs.duapp.com/mombaby/css/chart.css"> -->
 	<style type="text/css">
 		#fork {
@@ -30,7 +30,7 @@
 		    padding: 0 1em;
 		}
 	 </style>
-    <script src="http://bcs.duapp.com/mombaby/js/chartjs/Chart.min.js"></script><!-- <script src="http://apps.bdimg.com/libs/Chart.js/0.2.0/Chart.min.js"></script> -->
+    <script src="http://121.40.99.4/static/chartjs/Chart.min.js"></script><!-- <script src="http://apps.bdimg.com/libs/Chart.js/0.2.0/Chart.min.js"></script> -->
 </head>
 <body role="document">
 	 <h3>{{ page_title }}</h3>
@@ -94,10 +94,10 @@
 	</div>
 
 <!-- jQuery文件。务必在bootstrap.min.js 之前引入-->
-<script src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script><!-- http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js
+<script src="http://121.40.99.4/static/jquery.mobile-1.4.3/jquery.mobile-1.4.3.min.js"></script><!-- http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js
 <!-- 最新的 Bootstrap 核心 JavaScript 文件-->
 <!-- <script src="http://lib.sinaapp.com/js/bootstrap/3.0.0/js/bootstrap.min.js"></script> --> <!-- sae cdn service -->
-<script src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> <!-- bootstrap cdn service -->
+<script src="http://121.40.99.4/static/bootstrap/js/bootstrap.min.js"></script> <!-- bootstrap cdn service -->
 <!-- http://apps.bdimg.com/libs/bootstrap/3.2.0/js/bootstrap.min.js --><!-- bae cdn service -->
 
 <script>
