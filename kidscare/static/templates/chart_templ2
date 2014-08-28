@@ -94,7 +94,7 @@
 	</div>
 
 <!-- jQuery文件。务必在bootstrap.min.js 之前引入-->
-<script src="http://121.40.99.4/static/jquery.mobile-1.4.3/jquery.mobile-1.4.3.min.js"></script><!-- http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js-->
+<script src="http://121.40.99.4/static/jquery.mobile-1.4.3/jquery.mobile-1.4.3.min.js"></script><!-- http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js
 <!-- 最新的 Bootstrap 核心 JavaScript 文件-->
 <!-- <script src="http://lib.sinaapp.com/js/bootstrap/3.0.0/js/bootstrap.min.js"></script> --> <!-- sae cdn service -->
 <script src="http://121.40.99.4/static/bootstrap/js/bootstrap.min.js"></script> <!-- bootstrap cdn service -->
