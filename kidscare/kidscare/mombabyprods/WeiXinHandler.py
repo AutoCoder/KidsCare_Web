@@ -37,26 +37,46 @@ class WeiXinHandler:
         msg = {}
         for child in root:
             msg[child.tag] = child.text
-            
-        if msg["MsgType"] == "event":
-            return WeiXinHandler.response_subscribe(msg)
-        else:
-            #record the wx user input for data Analysis later
-            WeiXinHandler.record_wxuserinput(msg)
-            wxinput = msg["Content"]
-            if wxinput in QueryHandler.Brand2EBrand.keys():
-                return WeiXinHandler.reponse_seriescharts(wxinput, msg)
-            elif wxinput.isdigit():
-                brandName = WeiXinHandler.brandindex2Name(int(wxinput))
-                if brandName in QueryHandler.Brand2EBrand.keys():
-                    return WeiXinHandler.reponse_seriescharts(brandName, msg)
+        try:    
+            if msg["MsgType"] == "event":
+                return WeiXinHandler.response_subscribe(msg)
+            else:
+                #record the wx user input for data Analysis later
+                WeiXinHandler.record_wxuserinput(msg)
+                wxinput = msg["Content"]
+                if wxinput in QueryHandler.Brand2EBrand.keys():
+                    return WeiXinHandler.reponse_seriescharts(wxinput, msg)
+                elif wxinput.isdigit():
+                    brandName = WeiXinHandler.brandindex2Name(int(wxinput))
+                    if brandName in QueryHandler.Brand2EBrand.keys():
+                        return WeiXinHandler.reponse_seriescharts(brandName, msg)
+                    else:
+                        return WeiXinHandler.response_wronginput(msg)
+                        print "exception when input digital"
+                elif wxinput == u'\u5976\u7c89': # unicode 'naifen'
+                    return WeiXinHandler.supported_brandlist(msg)
                 else:
                     return WeiXinHandler.response_wronginput(msg)
-                    print "exception when input digital"
-            elif wxinput == u'\u5976\u7c89': # unicode 'naifen'
-                return WeiXinHandler.supported_brandlist(msg)
-            else:
-                return WeiXinHandler.response_wronginput(msg)
+        except Exception, debuginfo:
+            return WeiXinHandler.replydebugforwx(debuginfo, msg)
+     
+    @staticmethod 
+    def replydebugforwx(exception, msg):
+        c = Context({
+                 'ToUserName' : msg['FromUserName'],
+                 'FromUserName': msg['ToUserName'],
+                 'createTime': str(int(time.time())),
+                 'content' : str(exception),
+                 'msgType' : 'text'
+                 })
+        
+        fp = open(TEMPLATE_DIR + '/text_templ')
+        t = Template(fp.read())
+        fp.close()
+        
+        xmlReply = t.render(c)
+        return xmlReply
+        
             
     @staticmethod
     def supported_brandlist(msg):
@@ -107,8 +127,8 @@ class WeiXinHandler:
                  'ToUserName' : msg['FromUserName'],
                  'FromUserName': msg['ToUserName'],
                  'createTime': str(int(time.time())),
-                 'series_list': renderShowList(show_list[:4]),
-                 'series_count': len(show_list[:4]),
+                 'series_list': renderShowList(show_list),
+                 'series_count': len(show_list),
                  'msgType' : 'news'
                  })
         fp = open(TEMPLATE_DIR + '/series_templ')
