@@ -101,14 +101,14 @@ class WeiXinHandler:
                 showdict['picurl'] = QueryHandler.getPicLinkforSeries(item.name)#item.pic_link
                 showdict['url'] = u"http://%s/milk/series/%s/trend" % (MOMBABY_HOST, QueryHandler.Series2ESeries[item.name])
                 contextlist.append(showdict)
-            return contextlist[:4] 
+            return contextlist 
         
         c = Context({
                  'ToUserName' : msg['FromUserName'],
                  'FromUserName': msg['ToUserName'],
                  'createTime': str(int(time.time())),
-                 'series_list': renderShowList(show_list),
-                 'series_count': len(show_list),
+                 'series_list': renderShowList(show_list[:4]),
+                 'series_count': len(show_list[:4]),
                  'msgType' : 'news'
                  })
         fp = open(TEMPLATE_DIR + '/series_templ')
