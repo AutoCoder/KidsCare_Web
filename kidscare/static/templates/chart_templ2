@@ -30,7 +30,7 @@
 		    padding: 0 1em;
 		}
 	 </style>
-    <script src="http://bcs.duapp.com/mombaby/js/chartjs/Chart.min.js"></script><!-- <script src="http://apps.bdimg.com/libs/Chart.js/0.2.0/Chart.min.js"></script> -->
+    <script src="../../../../static/chartjs/Chart.min.js"></script><!-- <script src="http://apps.bdimg.com/libs/Chart.js/0.2.0/Chart.min.js"></script> -->
 </head>
 <body role="document">
 	 <h3>{{ page_title }}</h3>

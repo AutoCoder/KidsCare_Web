@@ -51,6 +51,7 @@ class WeiXinHandler:
                 if brandName in QueryHandler.Brand2EBrand.keys():
                     return WeiXinHandler.reponse_seriescharts(brandName, msg)
                 else:
+                    return WeiXinHandler.response_wronginput(msg)
                     print "exception when input digital"
             elif wxinput == u'\u5976\u7c89': # unicode 'naifen'
                 return WeiXinHandler.supported_brandlist(msg)
@@ -100,7 +101,7 @@ class WeiXinHandler:
                 showdict['picurl'] = QueryHandler.getPicLinkforSeries(item.name)#item.pic_link
                 showdict['url'] = u"http://%s/milk/series/%s/trend" % (MOMBABY_HOST, QueryHandler.Series2ESeries[item.name])
                 contextlist.append(showdict)
-            return contextlist 
+            return contextlist[:4] 
         
         c = Context({
                  'ToUserName' : msg['FromUserName'],
@@ -136,7 +137,7 @@ class WeiXinHandler:
     
     @staticmethod 
     def response_wronginput(msg):
-        reply_templ = u"\u60a8\u8f93\u5165\u7684\u5976\u7c89\u54c1\u724c\u672c\u53f7\u6682\u65f6\u4e0d\u652f\u6301"
+        reply_templ = u"\u4e0d\u652f\u6301\u8be5\u8f93\u5165\uff0c\u8bf7\u8f93\u5165\u3010\u5976\u7c89\u3011\u67e5\u8be2\u672c\u53f7\u6536\u5f55\u7684\u6240\u6709\u5976\u7c89\u54c1\u724c"
         c = Context({
                  'ToUserName' : msg['FromUserName'],
                  'FromUserName': msg['ToUserName'],
