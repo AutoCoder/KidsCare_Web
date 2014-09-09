@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
     <meta name="language" content="zh_cn" />
-    <title>比价图</title>
+    <title>各大电商价格比较</title>
 	<!-- 新 Bootstrap 核心 CSS 文件 -->
     <!-- <link rel="stylesheet" href="http://lib.sinaapp.com/js/bootstrap/3.0.0/css/bootstrap.min.css"> --> <!-- sae cdn service -->
     <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.min.css"><!-- bootstrap cdn service -->
@@ -52,6 +52,9 @@
 			{% endif %}
 					<div class="row">
 				        <div class="col-md-12 col-sm-12 col-xs-12"><!-- col-md-offset-1 col-sm-offset-1 -->
+					      <div id="emptywarningdiv{{ seg }}" class="alert alert-info" role="alert">
+					        没有该类别的任何商品信息。
+					      </div>
 				        	{%if tableitem %}
 							<table class="table table-striped">
 								<thead>
@@ -121,26 +124,27 @@ $(function () {
 
 function reloadchart(seg){
 	lineChartData = null
-	if (seg == 1)
-	{
+	if (seg == 1){
 		lineChartData = chartdata_1
+		$('#emptywarningdiv1')[0].hidden = Boolean(chartdata_1)
 	}
-	else if(seg == 2)
-	{
+	else if(seg == 2){
 		lineChartData = chartdata_2
+		$('#emptywarningdiv2')[0].hidden = Boolean(chartdata_2)
 	}
-	else if(seg == 3)
-	{
-		lineChartData = chartdata_3
+	else if(seg == 3){
+		lineChartData = chartdata_3		
+		$('#emptywarningdiv3')[0].hidden = Boolean(chartdata_3)
 	}
-	else if(seg == 4)
-	{
+	else if(seg == 4){
 		lineChartData = chartdata_4
+		$('#emptywarningdiv4')[0].hidden = Boolean(chartdata_4)
 	}
 
-	if (lineChartData == null)
-	{
-		window.myLine.chart.canvas.hidden = true;
+	if (lineChartData == null){
+		if (window.myLine){
+			window.myLine.chart.canvas.hidden = true;
+		}
 		$('#ChartTitleId')[0].hidden = true;
 		return;
 	}

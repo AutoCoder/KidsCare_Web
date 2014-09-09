@@ -117,7 +117,7 @@ if RunInCloud:
     MOMBABY_HOST = '121.40.99.4'
     DbHost = 'alikidscare.mysql.rds.aliyuncs.com'
 else:
-    MOMBABY_HOST = '10.31.186.144:8004'
-    DbHost = '10.31.186.144'
+    MOMBABY_HOST = '10.31.186.120:8004'
+    DbHost = '10.31.186.120'
     
 PicRelativeLink = "http://bcs.duapp.com/mombaby/MilkImage/"
