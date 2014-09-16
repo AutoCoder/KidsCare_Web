@@ -92,9 +92,9 @@ class QueryHandler(object):
     def getLatestprods(series, tunnelName, seg):
         now = datetime.datetime.now()
         start = now - datetime.timedelta(hours=23, minutes=59, seconds=59)
-        count = MilkProd.objects.filter(name=series, tunnel=tunnelName, segment=seg, scrapy_time__gt=start).count()
+        count = MilkProd.objects.filter(name=series, tunnel=tunnelName, segment=seg, volume__lte=2000, scrapy_time__gt=start).count()
         if count:
-            return MilkProd.objects.filter(name=series, tunnel=tunnelName, segment=seg, scrapy_time__gt=start).order_by('unitprice')[0]
+            return MilkProd.objects.filter(name=series, tunnel=tunnelName, segment=seg, volume__lte=2000, scrapy_time__gt=start).order_by('unitprice')[0]
         else:
             return None 
     
@@ -108,7 +108,7 @@ class QueryHandler(object):
             sql = u"""Select tunnel, brand, segment, name, price, unitprice, volume, pic_link, prod_link, scrapy_time FROM
                     (SELECT tunnel, brand, segment, name, price, unitprice, volume, pic_link, prod_link, scrapy_time,
                     timestampdiff (hour, scrapy_time, NOW()) AS intervals 
-                    FROM mom_baby.milk_prod where segment = %d and name = '%s' and tunnel = '%s' and scrapy_time between date_sub(NOW(), INTERVAL %d DAY) and NOW()
+                    FROM mom_baby.milk_prod where segment = %d and name = '%s' and tunnel = '%s' and volume < 2000 and scrapy_time between date_sub(NOW(), INTERVAL %d DAY) and NOW()
                     ) AS t 
                     WHERE (t.intervals %s) < 24
                         order by scrapy_time Asc;""" % (segment, ser, tunnel, duration, '% ' + str(subsection * 24))
