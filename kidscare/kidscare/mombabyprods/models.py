@@ -130,6 +130,7 @@ class MilkSeries(models.Model):
     brandin = models.CharField(db_column='BrandIn', max_length=20) # Field name made lowercase.
     ename = models.CharField(max_length=20)
     ebrandin = models.CharField(db_column='eBrandIn', max_length=20) # Field name made lowercase.
+    description = models.CharField(db_column='description', max_length=255) # Field name made lowercase.
     class Meta:
         managed = False
         db_table = 'milk_series'

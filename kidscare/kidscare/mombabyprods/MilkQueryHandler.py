@@ -61,23 +61,10 @@ class QueryHandler(object):
 
     @staticmethod
     def Series(brand):
-        series_list = []
         if brand:
-            series_list = [item.name for item in MilkSeries.objects.filter(brandin=brand)]
+            return MilkSeries.objects.filter(brandin=brand)
         else:
             return []
-        
-        cheapest_prod = []
-        for seriesname in series_list:
-            cheapest = MilkProd(unitprice=10000)
-            for tunnelstr in QueryHandler.Tunnels2Ltunnels.keys():
-                count = MilkProd.objects.filter(name=seriesname, tunnel=tunnelstr).count()
-                if count:
-                    temp = MilkProd.objects.filter(name=seriesname, tunnel=tunnelstr).order_by('-scrapy_time')[0]
-                    if temp and cheapest.unitprice > temp.unitprice:
-                        cheapest = temp
-            cheapest_prod.append(cheapest)
-        return cheapest_prod
     
     @staticmethod 
     def getPicLinkforSeries(seriesName):
