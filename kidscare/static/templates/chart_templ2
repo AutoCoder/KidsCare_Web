@@ -52,7 +52,7 @@
 			{% endif %}
 					<div class="row">
 				        <div class="col-md-12 col-sm-12 col-xs-12"><!-- col-md-offset-1 col-sm-offset-1 -->
-					      <div id="emptywarningdiv{{ seg }}" class="alert alert-info" role="alert">
+					      <div id="emptywarningdiv{{ seg }}" class="alert alert-info" style="visibility:hidden" role="alert">
 					        没有该类别的任何商品信息。
 					      </div>
 				        	{%if tableitem %}
