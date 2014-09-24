@@ -8,7 +8,7 @@
     <title>各大电商价格比较</title>
 	<!-- 新 Bootstrap 核心 CSS 文件 -->
     <!-- <link rel="stylesheet" href="http://lib.sinaapp.com/js/bootstrap/3.0.0/css/bootstrap.min.css"> --> <!-- sae cdn service -->
-    <link rel="stylesheet" type="text/css" href="../../../../static/bootstrap/css/bootstrap.min.css"><!-- bootstrap cdn service -->
+    <link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.2.0/css/bootstrap.min.css"><!-- bootstrap cdn service -->
 	<!-- <link rel="stylesheet" type="text/css" href="http://bcs.duapp.com/mombaby/css/chart.css"> -->
 	<style type="text/css">
 		#fork {
@@ -100,7 +100,7 @@
 <script src="http://apps.bdimg.com/libs/jquery/2.1.1/jquery.min.js"></script><!-- http://cdn.bootcss.com/jquery/1.11.1/jquery.min.js
 <!-- 最新的 Bootstrap 核心 JavaScript 文件-->
 <!-- <script src="http://lib.sinaapp.com/js/bootstrap/3.0.0/js/bootstrap.min.js"></script> --> <!-- sae cdn service -->
-<script src="../../../../static/bootstrap/js/bootstrap.min.js"></script> <!-- bootstrap cdn service -->
+<script src="http://cdn.bootcss.com/bootstrap/3.2.0/js/bootstrap.min.js"></script> <!-- bootstrap cdn service -->
 <!-- http://apps.bdimg.com/libs/bootstrap/3.2.0/js/bootstrap.min.js --><!-- bae cdn service -->
 
 <script>
