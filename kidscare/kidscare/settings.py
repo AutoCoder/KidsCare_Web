@@ -97,7 +97,7 @@ USE_I18N = True
 
 USE_L10N = True
 
-USE_TZ = True
+USE_TZ = False
 
 
 # Static files (CSS, JavaScript, Images)
@@ -117,7 +117,7 @@ if RunInCloud:
     MOMBABY_HOST = '121.40.99.4'
     DbHost = 'alikidscare.mysql.rds.aliyuncs.com'
 else:
-    MOMBABY_HOST = '10.31.186.165:8004'
-    DbHost = '10.31.186.165'
+    MOMBABY_HOST = '10.31.186.102:8004'
+    DbHost = '10.31.186.102'
     
 PicRelativeLink = "http://bcs.duapp.com/mombaby/MilkImage/"
