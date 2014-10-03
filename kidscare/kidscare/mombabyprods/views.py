@@ -74,6 +74,10 @@ def preprocessTrendData(dictdata):
                     tunneldictlist[tunnel][idx] = item[5]
                     linkdict[tunnel] = item[8]
                     
+            for tunnel, tunneldata in tunneldictlist.items():
+                if len(tunneldata) and tunneldata[-1] == 0 :
+                    del tunneldictlist[tunnel]
+                    
             for tunnel, trenddata in tunneldictlist.items():
                 i = 0 
                 while trenddata[i] == 0:
