@@ -1,0 +1,7 @@
+<html><head></head><body><h2>一大波羊毛正在袭来...</h2><div>"
+<p>|品牌|系列|价格|包装重量|单价|链接|</p>"
+<p>|-------------------------------|</p>
+{% for item in results %}
+	</p>|{{ item.brand }}|{{ item.name }}|{{ item.price }}￥|{{ item.volume }}g|{{ item.unitprice }}(￥/100g)|<a href="{{ item.prod_link }}">链接</a>|</p>	
+{% endfor %}	 
+</div><html>
