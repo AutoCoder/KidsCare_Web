@@ -19,11 +19,11 @@ from django.template import Template, Context
 def CheckIsCheapestWithdiscount(series_name, duration):
 	now = datetime.datetime.now()
 	duration_begin = now - duration # 1 month : datetime.timedelta(hours=719, minutes=59, seconds=59) 
-	cheapestProds = MilkProd.objects.filter(name=series_name, volume__lte=2000, scrapy_time__gt=duration_begin).order_by('-unitprice')
+	cheapestProds = MilkProd.objects.filter(name=series_name, volume__lte=2000, scrapy_time__gt=duration_begin).order_by('unitprice')
 	if cheapestProds:
 		cheapestProd = cheapestProds[0]
 		today_begin = now - datetime.timedelta(hours=23, minutes=59, seconds=59)
-		if True: #cheapestProd.scrapy_time > today_begin:
+		if cheapestProd.scrapy_time > today_begin:
 			avg_utprice = sum([item.unitprice for item in cheapestProds])/len(cheapestProds)
 			return cheapestProd, (cheapestProd.unitprice/avg_utprice)
 		else:
@@ -32,10 +32,11 @@ def CheckIsCheapestWithdiscount(series_name, duration):
 		return None, 1
 
 def FindAllYangMao(duration=datetime.timedelta(hours=719, minutes=59, seconds=59), discount_threshold = 0.9):
+	discount_resonable = 0.5
 	results = []
 	for serie in MilkSeries.objects.all():
 		item, discout = CheckIsCheapestWithdiscount(serie.name, duration)
-		if item and True: #discout < discount_threshold:
+		if item and discout < discount_threshold and discout > discount_resonable:
 			results.append(item)
 
 	return results
