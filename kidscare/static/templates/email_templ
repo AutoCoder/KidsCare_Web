@@ -1,7 +1,22 @@
-<html><head></head><body><h2>一大波羊毛正在袭来...</h2><div>"
-<p>|品牌|系列|价格|包装重量|单价|链接|</p>"
-<p>|-------------------------------|</p>
+<html><head></head><body><h2>一大波羊毛正在袭来...</h2><div>
+<table border="0">
+<tr>
+<th>品牌</th>
+<th>系列</th>
+<th>价格</th>
+<th>包装重量</th>
+<th>单价</th>
+<th>链接</th>
+</tr>
 {% for item in results %}
-	</p>|{{ item.brand }}|{{ item.name }}|{{ item.price }}￥|{{ item.volume }}g|{{ item.unitprice }}(￥/100g)|<a href="{{ item.prod_link }}">链接</a>|</p>	
-{% endfor %}	 
+	<tr>
+	<td>{{ item.brand }}</td>
+	<td>{{ item.name }}</td>
+	<td>{{ item.price }}￥</td>
+	<td>{{ item.volume }}g</td>
+	<td>{{ item.unitprice }}(￥/100g)</td>
+	<td><a href="{{ item.prod_link }}">链接</a></td>
+	</tr>
+{% endfor %}	
+</table> 
 </div><html>
