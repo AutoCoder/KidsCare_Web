@@ -2,7 +2,7 @@ from django.conf.urls import patterns, include, url
 
 from django.contrib import admin
 from settings import STATICFILES_DIRS
-from views import hello, rtthreadtext, rtthreadaudio, rtthreadaudiostream, rtthreadaudioattachment
+from views import hello, rtthreadtext, rtthreadaudio, rtthreadaudiostream
 from mombabyprods.views import handleWXHttpRequest
 
 admin.autodiscover()
