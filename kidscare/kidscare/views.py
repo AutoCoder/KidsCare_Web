@@ -6,26 +6,20 @@ def hello(request):
     return HttpResponse("Hello world")
 
 def rtthreadaudio(request):
-	filename = 'winlogoff.wav'
-	f = open(filename)
+	filename = os.path.join(os.path.dirname(__file__),'winlogoff.wav')
+	f = open(filename, 'rb')
 	data = f.read()
+	response = HttpResponse(data, content_type='audio/x-wav')
+	response['Content-Disposition'] = 'attachment; filename=winlogoff.wav' 
 	f.close()
-	return HttpResponse(data, content_type='audio/x-wav')
-	#response = HttpResponse(content_type='audio/x-wav')
-	#response['Content-Disposition'] = 'attachment; filename=winlogoff.wav'  
-	#return response
+	return response
 
 def rtthreadaudiostream(request):
-	filename = os.path.join(os.path.dirname(__file__),'winlogoff.wav')
-	f = open(filename)
-	data = f.read()
-	f.close()
-	return HttpResponse(data, content_type='audio/x-wav')#application/octet-stream')
-
-def rtthreadaudioattachment(request):
-	response = HttpResponse(content_type='audio/x-wav')
-	response['Content-Disposition'] = 'attachment; filename=winlogoff.wav' 
-	return response
+    filename = os.path.join(os.path.dirname(__file__),'winlogoff.wav')
+    f = open(filename, 'rb')
+    data = f.read()
+    f.close()
+    return HttpResponse(data, content_type='audio/x-wav')#application/octet-stream')
 
 def rtthreadtext(request):  
 	ret_msg = {}
