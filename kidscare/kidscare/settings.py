@@ -68,9 +68,20 @@ if RunInCloud:
             'NAME': 'mom_baby',
             'USER': 'spider',
             'PASSWORD': 'wodemima',
-            'HOST': 'alikidscare.mysql.rds.aliyuncs.com',
+            'HOST': '127.0.0.1',
             'PORT': '3306'
         }
+        # before migrating the database from rds to ecs
+        # 'default': {
+        #     # 'ENGINE': 'django.db.backends.sqlite3',
+        #     # 'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        #     'ENGINE': 'django.db.backends.mysql',
+        #     'NAME': 'mom_baby',
+        #     'USER': 'spider',
+        #     'PASSWORD': 'wodemima',
+        #     'HOST': 'alikidscare.mysql.rds.aliyuncs.com',
+        #     'PORT': '3306'
+        # }
     }
 else:
     DATABASES = {
@@ -117,7 +128,7 @@ if RunInCloud:
     MOMBABY_HOST = '121.40.99.4'
     DbHost = 'alikidscare.mysql.rds.aliyuncs.com'
 else:
-    MOMBABY_HOST = '10.31.186.161:8004'
-    DbHost = '10.31.186.161'
+    MOMBABY_HOST = '10.31.186.89:8004'
+    DbHost = '10.31.186.89'
     
 PicRelativeLink = "http://kidscare.qiniudn.com/"
