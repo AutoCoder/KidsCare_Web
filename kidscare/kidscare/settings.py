@@ -126,7 +126,9 @@ PROFILE_LOG_BASE = os.path.join(BASE_DIR, 'log/profilings/')
 
 if RunInCloud:
     MOMBABY_HOST = '121.40.99.4'
-    DbHost = 'alikidscare.mysql.rds.aliyuncs.com'
+    DbHost = '127.0.0.1'
+    # before migrating the database from rds to ecs
+    #DbHost = 'alikidscare.mysql.rds.aliyuncs.com'
 else:
     MOMBABY_HOST = '10.31.186.89:8004'
     DbHost = '10.31.186.89'

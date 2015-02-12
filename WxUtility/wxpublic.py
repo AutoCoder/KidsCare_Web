@@ -86,7 +86,7 @@ class wxpublic:
         pass
     
 if __name__ =='__main__':  
-    wx_sub = wxpublic("2693050072@qq.com","wodemima123")
+    wx_sub = wxpublic("2693050072@qq.com","wodemima123","2398793139")
     #wx_sub = wxpublic("694830047","diudiu88")
     if wx_sub.login():
         content = "just for testing..."
