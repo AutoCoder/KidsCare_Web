@@ -7,7 +7,7 @@ from models import MilkBrand, MilkProd, MilkSeries, MilkTunnel
 def connectdb():
     try:
         conn = MySQLdb.connect(host=DbHost, user='spider',passwd='wodemima',port=3306, charset='utf8')
-        conn.select_db('Mom_Baby')
+        conn.select_db('mom_baby')
         return conn
     except:
         assert(False)
