@@ -1,12 +1,12 @@
 import MySQLdb
 import datetime
-from kidscare.settings import DbHost, PicRelativeLink
+from kidscare.settings import DbHost, PicRelativeLink, DbUser
 from models import MilkBrand, MilkProd, MilkSeries, MilkTunnel
 
 
 def connectdb():
     try:
-        conn = MySQLdb.connect(host=DbHost, user='spider',passwd='wodemima',port=3306, charset='utf8')
+        conn = MySQLdb.connect(host=DbHost, user=DbUser, passwd='wodemima',port=3306, charset='utf8')
         conn.select_db('mom_baby')
         return conn
     except:
